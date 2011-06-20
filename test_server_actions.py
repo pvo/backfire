@@ -13,11 +13,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from integration import adaptor
-from integration import base
-from integration import flags
-from integration import test_servers
-from integration import utils
+import adaptor
+import base
+import flags
+import test_servers
+import utils
 
 FLAGS = flags.FLAGS
 

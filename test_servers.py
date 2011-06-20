@@ -15,10 +15,10 @@
 
 import novaclient
 
-from integration import adaptor
-from integration import base
-from integration import flags
-from integration import utils
+import adaptor
+import base
+import flags
+import utils
 
 FLAGS = flags.FLAGS
 

@@ -13,8 +13,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from integration import adaptor
-from integration import base
+import adaptor
+import base
 
 
 class FlavorTest(base.BaseIntegrationTest):

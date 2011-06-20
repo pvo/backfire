@@ -15,8 +15,8 @@
 
 import novaclient
 
-from integration import adaptor
-from integration import base
+import adaptor
+import base
 
 
 class IpGroupTest(base.BaseIntegrationTest):

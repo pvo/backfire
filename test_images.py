@@ -15,9 +15,9 @@
 
 from glance import client
 
-from integration import adaptor
-from integration import base
-from integration import flags
+import adaptor
+import base
+import flags
 
 FLAGS = flags.FLAGS
 

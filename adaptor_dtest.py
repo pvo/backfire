@@ -16,7 +16,7 @@
 import dtest
 from dtest import util
 
-from integration import flags
+import flags
 
 FLAGS = flags.FLAGS
 

@@ -17,8 +17,8 @@ import random
 
 import novaclient
 
-from integration import adaptor
-from integration import flags
+import adaptor
+import flags
 
 FLAGS = flags.FLAGS
 

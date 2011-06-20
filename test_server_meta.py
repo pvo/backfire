@@ -13,9 +13,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from integration import adaptor
-from integration import test_servers
-from integration import utils
+import adaptor
+import test_servers
+import utils
 
 
 class ServerMetaTest(test_servers.BaseServerTest):

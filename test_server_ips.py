@@ -15,9 +15,9 @@
 
 import novaclient
 
-from integration import adaptor
-from integration import test_servers
-from integration import utils
+import adaptor
+import test_servers
+import utils
 
 
 class ServerIpTest(test_servers.BaseServerTest):

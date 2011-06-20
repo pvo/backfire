@@ -27,7 +27,7 @@ from nose import suite
 from nose import tools
 from nose import util
 
-from integration import flags
+import flags
 
 FLAGS = flags.FLAGS
 
