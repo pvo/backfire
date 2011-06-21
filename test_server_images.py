@@ -43,6 +43,7 @@ class ServerImageTest(test_servers.BaseServerTest):
 
     @adaptor.attr(longtest=True)
     @adaptor.timed(FLAGS.timeout * 120)
+    @adaptor.depends(test_create_server_image)
     def test_snap_and_restore(self):
         """Verify that a server is snapped and rebuilt from that snap"""
 
@@ -66,4 +67,6 @@ class ServerImageTest(test_servers.BaseServerTest):
 
         created_server = self.os.servers.get(self.server.id)
 
-        adaptor.assert_equal(backup_image.id, created_server.imageId)
+        # This has the original image_id out of convention.
+        image = self.os.images.get(created_server.imageId)
+        adaptor.assert_equal(backup_image.name, image.name)

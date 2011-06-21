@@ -121,3 +121,25 @@ class ServerActionTest(base.BaseIntegrationTest):
         self.os.servers.reboot(self.server, type='HARD')
         adaptor.assert_true(states.waitForState(self.os.servers.get,
                                                 'status', self.server))
+
+    @adaptor.timed(FLAGS.timeout * 60)
+    @adaptor.depends(test_servers.ServerCreationTest.test_create_delete_server)
+    def test_rebuild_server(self):
+        """Verify that a server is created, rebuilt, and then deleted."""
+
+        # Trigger a rebuild
+        self.os.servers.rebuild(self.server.id, FLAGS.image)
+
+        # Legal states...
+        states = utils.StatusTracker('active', 'build', 'active')
+
+        # Wait for server to transition to next state and make sure it
+        # went to the correct one
+        adaptor.assert_true(states.waitForState(self.os.servers.get,
+                                                'status', self.server))
+
+        # Verify that rebuild acted correctly
+        created_server = self.os.servers.get(self.server.id)
+        img = self.os.images.get(FLAGS.image)
+
+        adaptor.assert_equal(img.id, created_server.imageId)

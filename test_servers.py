@@ -57,49 +57,6 @@ class ServerCreationTest(base.BaseIntegrationTest):
             states.waitForState(self.os.servers.get, 'status', new_server.id)
         except novaclient.NotFound:
             return
-    
-    @adaptor.attr(longtest=True)
-    @adaptor.timed(FLAGS.timeout * 60)
-    def test_rebuild_server(self):
-        """Verify that a server is created, rebuilt, and then deleted."""
-
-        # Setup
-        server_name = self.randName()
-        new_server = self.os.servers.create(name=server_name,
-                                            image=FLAGS.image,
-                                            flavor=FLAGS.flavor)
-
-        # Legal states...
-        states = utils.StatusTracker('active', 'build', 'active')
-
-        # Wait for server to transition to next state and make sure it
-        # went to the correct one
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', new_server))
-
-        # Verify the server was created correctly
-        created_server = self.os.servers.get(new_server.id)
-        adaptor.assert_equal(server_name, created_server.name)
-        self.os.servers.rebuild(new_server.id, FLAGS.image)
-
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', new_server))
-
-        created_server = self.os.servers.get(new_server.id)
-        adaptor.assert_equal(server_name, created_server.name)
-        img = self.os.images.get(FLAGS.image)
-
-        adaptor.assert_equal(img.id, created_server.imageId)
-
-
-        # Delete the server and verify it is removed
-        new_server.delete()
-
-        # Legal states...I don't believe it'll ever go to 'deleted',
-        # though...
-        states = utils.StatusTracker('active', 'build', 'deleted')
-        adaptor.assert_raises(novaclient.NotFound, states.waitForState,
-                              self.os.servers.get, 'status', new_server.id)
 
 class BaseServerTest(base.BaseIntegrationTest):
     """Base class for server-related tests.
