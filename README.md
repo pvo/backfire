@@ -1,9 +1,29 @@
-Integration Testing Suite
-=========================
+# Integration Testing Suite
+
+--------------------------------
 
 You have discovered an integration testing suite designed to be run against Nova.
 This test suite can be run against existing Nova installations to verify the
 operation of the OpenStack API, currently limited to API version 1.0 only.
+
+## Usage
+
+    % python ./run_tests.py --username=<username> --api_key=<API key> \
+        --auth_url=<authentication URL> --glance_host=<glance host> \
+        --glance_port=<glance port>
+
+For ease of use with nova, you can source your novarc and then run the
+above command with substitutions:
+
+    % python ./run_tests.py --username=$NOVA_USERNAME --api_key=$NOVA_API_KEY \
+        --auth_url=$NOVA_URL --glance_host=<glance host> \
+        --glance_port=<glance port>
+
+## Dependencies
+
+DTest - Installed from PyPi
+
+## Notes
 
 Ideally, to run the suite, you will need to disable rate limiting on the
 cluster.  Find the section of the etc/nova/api-paste.ini file labeled
@@ -13,13 +33,9 @@ cluster.  Find the section of the etc/nova/api-paste.ini file labeled
 You will also need the following information: a username with
 administrative privileges; the API key for that user; the
 authentication URL for the Nova installation; and the host and port
-number of the glance server.  Run the suite with a command like the
-following:
+number of the glance server.
 
-
-    % python ./run_tests.py --username=<username> --api_key=<API key> \
-        --auth_url=<authentication URL> --glance_host=<glance host> \
-        --glance_port=<glance port>
+## Options and Arguments
 
 The following additional flags are also recognized:
 
