@@ -16,7 +16,7 @@
 import datetime
 import time
 
-import adaptor
+from integration import adaptor
 
 
 # Resolution is the time between successive status checks; status_ival
