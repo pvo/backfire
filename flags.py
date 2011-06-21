@@ -55,5 +55,3 @@ DEFINE_bool('dry_run', False,
 DEFINE_bool('debug', False,
             'Enables debugging mode by disabling output capturers.')
 DEFINE_string('dot', None, 'Dump a dependency graph to the named file.')
-DEFINE_bool('use_dtest', False,
-            'Enables using the DTest framework in preference to nose.')

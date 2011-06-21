@@ -20,6 +20,8 @@ import gettext
 import os
 import sys
 
+import dtest
+
 import flags
 
 FLAGS = flags.FLAGS
