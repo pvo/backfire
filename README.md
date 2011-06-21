@@ -8,16 +8,16 @@ operation of the OpenStack API, currently limited to API version 1.0 only.
 
 ## Usage
 
-    % python ./run_tests.py --username=<username> --api_key=<API key> \
-        --auth_url=<authentication URL> --glance_host=<glance host> \
-        --glance_port=<glance port>
+    % python ./run_tests.py --username=<username> --api-key=<API key> \
+        --nova-url=<authentication URL> --glance-host=<glance host> \
+        --glance-port=<glance port>
 
 For ease of use with nova, you can source your novarc and then run the
 above command with substitutions:
 
-    % python ./run_tests.py --username=$NOVA_USERNAME --api_key=$NOVA_API_KEY \
-        --auth_url=$NOVA_URL --glance_host=<glance host> \
-        --glance_port=<glance port>
+    % python ./run_tests.py --username=$NOVA_USERNAME --api-key=$NOVA_API_KEY \
+        --nova-url=$NOVA_URL --glance-host=<glance host> \
+        --glance-port=<glance port>
 
 ## Dependencies
 
@@ -46,27 +46,26 @@ The following additional flags are also recognized:
           desired value.  It is an integer specifying the timeout in
           minutes.
   
-    --directory=<dir>
+    -d <dir>, --directory=<dir>
           Use the tests in <dir>.  By default, the tests in the current
           directory are used.
   
-    --max_threads=<max>
-          When using DTest for testing (by supplying --use_dtest), the
-          maximum number of simultaneous threads is limited to <max>.
+    -m <max>, --max-threads=<max>
+          The maximum number of simultaneous threads is limited to <max>.
           By default, there is no limit.
   
-    --skip=<rule>
+    -s <rule>, --skip=<rule>
           Specifies a rule to control which tests are skipped.
   
-    --no_skip
+    --no-skip
           Specifies that tests which are marked to be skipped will not
           actually be skipped.
   
-    --dry_run
+    -n, --dry-run
           Prints out a list of the tests discovered, but does not run
           them.
   
-    --debug
+    -D, --debug
           Disables output capturing, causing output to be written out
           immediately.
   
@@ -76,16 +75,8 @@ The following additional flags are also recognized:
           for feeding to GraphViz.  If not paired with --dry_run, the
           output will be color-coded to indicate tests that passed,
           failed, or were skipped.
-  
-    --use_dtest
-          By default, the tests are run using the nose testing
-          framework.  If this option is given, the DTest framework
-          (available from PyPi) is used instead.  The DTest framework
-          supports threading to run tests in parallel; it also supports
-          the --dot option, to output a visualization of the results of
-          the tests.
-  
-    --test_image=<image>
+
+    --test-image=<image>
           Specifies an image to be used when testing the image portion
           of the API.  By default, uses test_image.img in the current
           directory.
