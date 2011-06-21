@@ -2,9 +2,10 @@
 
 --------------------------------
 
-You have discovered an integration testing suite designed to be run against Nova.
-This test suite can be run against existing Nova installations to verify the
-operation of the OpenStack API, currently limited to API version 1.0 only.
+You have discovered an integration testing suite designed to be run
+against Nova.  This test suite can be run against existing Nova
+installations to verify the operation of the OpenStack API, currently
+limited to API version 1.0 only.
 
 ## Usage
 
@@ -25,9 +26,9 @@ DTest - Installed from PyPi
 
 ## Notes
 
-Ideally, to run the suite, you will need to disable rate limiting on the
-cluster.  Find the section of the etc/nova/api-paste.ini file labeled
-"[pipeline:openstackapi10]" and remove "ratelimit" from the
+Ideally, to run the suite, you will need to disable rate limiting on
+the cluster.  Find the section of the etc/nova/api-paste.ini file
+labeled "[pipeline:openstackapi10]" and remove "ratelimit" from the
 "pipeline".  (Don't forget to add it back after running the tests.)
 
 You will also need the following information: a username with
@@ -45,30 +46,32 @@ The following additional flags are also recognized:
           applied.  This flag allows the timeout to be adjusted to any
           desired value.  It is an integer specifying the timeout in
           minutes.
-  
+
     -d <dir>, --directory=<dir>
-          Use the tests in <dir>.  By default, the tests in the current
-          directory are used.
-  
+          Use the tests in <dir>.  By default, the tests in the
+          current directory are used.
+
     -m <max>, --max-threads=<max>
-          The maximum number of simultaneous threads is limited to <max>.
-          By default, there is no limit.
-  
+          The maximum number of simultaneous threads is limited to
+          <max>.  By default, there is no limit.
+
     -s <rule>, --skip=<rule>
-          Specifies a rule to control which tests are skipped.
-  
+          Specifies a rule to control which tests are skipped.  For
+          instance, "--skip=longtest" will cause marked long-running
+          tests to be skipped
+
     --no-skip
           Specifies that tests which are marked to be skipped will not
           actually be skipped.
-  
+
     -n, --dry-run
           Prints out a list of the tests discovered, but does not run
           them.
-  
+
     -D, --debug
           Disables output capturing, causing output to be written out
           immediately.
-  
+
     --dot=<file>
           When using DTest for testing (by supplying --use_dtest), the
           test dependencies are output to <file> in a format suitable
@@ -80,12 +83,12 @@ The following additional flags are also recognized:
           Specifies an image to be used when testing the image portion
           of the API.  By default, uses test_image.img in the current
           directory.
-  
+
     --flavor=<flavorId>
-          Specifies the ID of the flavor to use for building instances.
-          By default, this is 1, which on default Nova installations is
-          the "m1.tiny" flavor.
-  
+          Specifies the ID of the flavor to use for building
+          instances.  By default, this is 1, which on default Nova
+          installations is the "m1.tiny" flavor.
+
     --image=<imageId>
           Specifies the ID of the image to use for building instances.
           By default, this is 3.
