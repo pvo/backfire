@@ -13,9 +13,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import dtest
+from dtest import util as dtutil
 import novaclient
 
-import adaptor
 import flags
 import test_servers
 import utils
@@ -26,7 +27,7 @@ FLAGS = flags.FLAGS
 class ServerImageTest(test_servers.BaseServerTest):
     """Test that the server images API works as expected."""
 
-    @adaptor.timed(FLAGS.timeout * 120)
+    @dtest.timed(FLAGS.timeout * 120)
     def test_create_server_image(self):
         """Verify a backup image for a server can be created."""
 
@@ -36,14 +37,14 @@ class ServerImageTest(test_servers.BaseServerTest):
 
         # Make a backup image for the server
         backup_image = self.os.images.create("backup", self.server)
-        adaptor.assert_true(states.waitForState(self.os.images.get,
-                                                'status', backup_image))
+        dtutil.assert_true(states.waitForState(self.os.images.get,
+                                               'status', backup_image))
 
-        adaptor.assert_equal(backup_image.name, "backup")
+        dtutil.assert_equal(backup_image.name, "backup")
 
-    @adaptor.attr(longtest=True)
-    @adaptor.timed(FLAGS.timeout * 120)
-    @adaptor.depends(test_create_server_image)
+    @dtest.attr(longtest=True)
+    @dtest.timed(FLAGS.timeout * 120)
+    @dtest.depends(test_create_server_image)
     def test_snap_and_restore(self):
         """Verify that a server is snapped and rebuilt from that snap"""
 
@@ -53,20 +54,20 @@ class ServerImageTest(test_servers.BaseServerTest):
         # Make a backup image for the server
 
         backup_image = self.os.images.create("backup", self.server)
-        adaptor.assert_true(states.waitForState(self.os.images.get,
-                                                'status', backup_image))
+        dtutil.assert_true(states.waitForState(self.os.images.get,
+                                               'status', backup_image))
 
-        adaptor.assert_equal(backup_image.name, "backup")
+        dtutil.assert_equal(backup_image.name, "backup")
          
 
         # Finally, rebuild from the image
         states = utils.StatusTracker('active', 'build', 'active')
         self.os.servers.rebuild(self.server.id, backup_image.id)
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', self.server))
+        dtutil.assert_true(states.waitForState(self.os.servers.get,
+                                               'status', self.server))
 
         created_server = self.os.servers.get(self.server.id)
 
         # This has the original image_id out of convention.
         image = self.os.images.get(created_server.imageId)
-        adaptor.assert_equal(backup_image.name, image.name)
+        dtutil.assert_equal(backup_image.name, image.name)

@@ -13,7 +13,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import adaptor
+from dtest import util as dtutil
+
 import base
 
 
@@ -34,20 +35,20 @@ class FlavorTest(base.BaseIntegrationTest):
         flavors = self.os.flavors.list()
 
         # Do we have a list?
-        adaptor.assert_not_equal(len(flavors), 0)
+        dtutil.assert_not_equal(len(flavors), 0)
 
         # Let's see if some of our base-line flavors are present
         foundflav = 0
         for flav in flavors:
             if flav.name in self.recognized_flavors:
                 exemplar = self.recognized_flavors[flav.name]
-                adaptor.assert_equal(flav.id, exemplar['id'])
-                adaptor.assert_equal(flav.ram, exemplar['ram'])
-                adaptor.assert_equal(flav.disk, exemplar['disk'])
+                dtutil.assert_equal(flav.id, exemplar['id'])
+                dtutil.assert_equal(flav.ram, exemplar['ram'])
+                dtutil.assert_equal(flav.disk, exemplar['disk'])
                 foundflav += 1
 
         # Make sure we found our flavors
-        adaptor.assert_equal(len(self.recognized_flavors), foundflav)
+        dtutil.assert_equal(len(self.recognized_flavors), foundflav)
 
     def test_get(self):
         """Test that we can get the details of a given flavor."""
@@ -57,7 +58,7 @@ class FlavorTest(base.BaseIntegrationTest):
             flav = self.os.flavors.get(exemplar['id'])
 
             # Check that all the details match
-            adaptor.assert_equal(exemplar['id'], flav.id)
-            adaptor.assert_equal(exemplar['name'], flav.name)
-            adaptor.assert_equal(exemplar['ram'], flav.ram)
-            adaptor.assert_equal(exemplar['disk'], flav.disk)
+            dtutil.assert_equal(exemplar['id'], flav.id)
+            dtutil.assert_equal(exemplar['name'], flav.name)
+            dtutil.assert_equal(exemplar['ram'], flav.ram)
+            dtutil.assert_equal(exemplar['disk'], flav.disk)

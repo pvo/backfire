@@ -13,9 +13,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from dtest import util as dtutil
 from glance import client
 
-import adaptor
 import base
 import flags
 
@@ -77,18 +77,18 @@ class ImageTest(base.BaseIntegrationTest):
         images = self.os.images.list()
 
         # Do we have a list?
-        adaptor.assert_not_equal(len(images), 0)
+        dtutil.assert_not_equal(len(images), 0)
 
         # Let's see if our test image is in the list
         foundimg = False
         for img in images:
             if img.id == self._image_id:
-                adaptor.assert_equal(img.name, self._image_name)
-                adaptor.assert_equal(img.status, 'ACTIVE')
+                dtutil.assert_equal(img.name, self._image_name)
+                dtutil.assert_equal(img.status, 'ACTIVE')
                 foundimg = True
 
         # Did we actually find the image we were looking for?
-        adaptor.assert_true(foundimg)
+        dtutil.assert_true(foundimg)
 
     def test_get(self):
         """Test that we can get the details of a given image."""
@@ -97,6 +97,6 @@ class ImageTest(base.BaseIntegrationTest):
         img = self.os.images.get(self._image_id)
 
         # Check that all the details match
-        adaptor.assert_equal(img.id, self._image_id)
-        adaptor.assert_equal(img.name, self._image_name)
-        adaptor.assert_equal(img.status, 'ACTIVE')
+        dtutil.assert_equal(img.id, self._image_id)
+        dtutil.assert_equal(img.name, self._image_name)
+        dtutil.assert_equal(img.status, 'ACTIVE')

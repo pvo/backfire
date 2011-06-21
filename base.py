@@ -15,15 +15,15 @@
 
 import random
 
+import dtest
 import novaclient
 
-import adaptor
 import flags
 
 FLAGS = flags.FLAGS
 
 
-class BaseIntegrationTest(adaptor.AdaptedTestCase):
+class BaseIntegrationTest(dtest.DTestCase):
     """Base integration test.
 
     This is a base integration test class, which ensures that an

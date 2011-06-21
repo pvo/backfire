@@ -29,8 +29,36 @@ if __name__ == '__main__':
     # Process command-line flags
     argv = FLAGS(sys.argv)
 
-    # Import the correct adaptor
-    import adaptor
+    # Build the arguments for running main()
+    args = {}
+    if FLAGS.no_skip:
+        args['skip'] = lambda dt: False
+    elif FLAGS.skip is not None:
+        if '=' in FLAGS.skip:
+            k, v = FLAGS.skip.split('=', 1)
+            args['skip'] = lambda dt: getattr(dt, k, None) == v
+        else:
+            args['skip'] = lambda dt: hasattr(dt, FLAGS.skip)
 
-    # Run the tests
-    sys.exit(adaptor.run_tests())
+    # Set up maximum number of threads
+    if FLAGS.max_threads is not None:
+        args['maxth'] = FLAGS.max_threads
+
+    # Are we doing a dry run?
+    if FLAGS.dry_run:
+        args['dryrun'] = True
+
+    # Are we in debug mode?
+    if FLAGS.debug:
+        args['debug'] = True
+
+    # Dumping the dependency graph?
+    if FLAGS.dot is not None:
+        args['dotpath'] = FLAGS.dot
+
+    # Finally, consider the directory
+    if FLAGS.directory is not None:
+        args['directory'] = FLAGS.directory
+
+    # Run the integration tests
+    sys.exit(dtest.main(**args))

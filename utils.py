@@ -16,7 +16,7 @@
 import datetime
 import time
 
-import adaptor
+import dtest
 
 
 # Resolution is the time between successive status checks; status_ival
@@ -77,9 +77,9 @@ class StatusTracker(object):
         while state is None:
             # Emit a status message every 5 times (~10 seconds)
             if counter > 0 and counter % (status_ival / resolution) == 0:
-                print >>adaptor.status, ('Waiting for state "%s"... (%s)' %
-                                         (self.final_state,
-                                          datetime.datetime.now() - start))
+                print >>dtest.status, ('Waiting for state "%s"... (%s)' %
+                                       (self.final_state,
+                                        datetime.datetime.now() - start))
             counter += 1
 
             time.sleep(resolution)

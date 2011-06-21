@@ -13,9 +13,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from dtest import util as dtutil
 import novaclient
 
-import adaptor
 import base
 
 
@@ -30,8 +30,8 @@ class IpGroupTest(base.BaseIntegrationTest):
 
         # Try to create the group--fails for now (operation not
         # implemented in nova)
-        adaptor.assert_raises(novaclient.OpenStackException,
-                              self.os.ipgroups.create, name)
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.os.ipgroups.create, name)
 
     def test_delete(self):
         """Test that we can delete an IP group."""
@@ -41,8 +41,8 @@ class IpGroupTest(base.BaseIntegrationTest):
 
         # Try to delete the group--fails for now (operation not
         # implemented in nova)
-        adaptor.assert_raises(novaclient.OpenStackException,
-                              self.os.ipgroups.delete, 1)  # change 1 to group
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.os.ipgroups.delete, 1)  # change 1 to group
 
     def test_get(self):
         """Test that we can get the details of an IP group."""
@@ -52,8 +52,8 @@ class IpGroupTest(base.BaseIntegrationTest):
 
         # Try to get the group--fails for now (operation not
         # implemented in nova)
-        adaptor.assert_raises(novaclient.OpenStackException,
-                              self.os.ipgroups.get, 1)  # change 1 to group
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.os.ipgroups.get, 1)  # change 1 to group
 
     def test_list(self):
         """Test that we can list the details of an IP group."""
@@ -63,5 +63,5 @@ class IpGroupTest(base.BaseIntegrationTest):
 
         # Try to list the groups--fails for now (operation not
         # implemented in nova)
-        adaptor.assert_raises(novaclient.OpenStackException,
-                              self.os.ipgroups.list)
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.os.ipgroups.list)

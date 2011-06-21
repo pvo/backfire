@@ -13,7 +13,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import adaptor
+from dtest import util as dtutil
+
 import test_servers
 import utils
 
@@ -28,10 +29,10 @@ class ServerMetaTest(test_servers.BaseServerTest):
         s = self.os.servers.get(self.server)
 
         # Make sure that we have metadata for this server
-        adaptor.assert_not_equal(len(s.metadata), 0)
+        dtutil.assert_not_equal(len(s.metadata), 0)
 
         # Verify that our metadata key is in there
-        adaptor.assert_true(self.meta_key in s.metadata)
+        dtutil.assert_true(self.meta_key in s.metadata)
 
         # Verify that it has the value we expect
-        adaptor.assert_equal(s.metadata[self.meta_key], self.meta_data)
+        dtutil.assert_equal(s.metadata[self.meta_key], self.meta_data)

@@ -13,7 +13,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import adaptor
+import dtest
+from dtest import util as dtutil
+
 import base
 import flags
 import test_servers
@@ -50,8 +52,8 @@ class ServerActionTest(base.BaseIntegrationTest):
         # Delete the server
         self.server.delete()
 
-    @adaptor.timed(FLAGS.timeout * 60)
-    @adaptor.depends(test_servers.ServerCreationTest.test_create_delete_server)
+    @dtest.timed(FLAGS.timeout * 60)
+    @dtest.depends(test_servers.ServerCreationTest.test_create_delete_server)
     def test_resize_server_confirm(self):
         """Verify that the flavor of a server can be changed."""
 
@@ -64,18 +66,18 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', self.server))
+        dtutil.assert_true(states.waitForState(self.os.servers.get,
+                                               'status', self.server))
 
         # Confirm the resize
         self.server.confirm_resize()
 
         # Check that server's flavor has changed
         self.server = self.os.servers.get(self.server)
-        adaptor.assert_equal(new_flavor.id, self.server.flavorId)
+        dtutil.assert_equal(new_flavor.id, self.server.flavorId)
 
-    @adaptor.timed(FLAGS.timeout * 60)
-    @adaptor.depends(test_servers.ServerCreationTest.test_create_delete_server)
+    @dtest.timed(FLAGS.timeout * 60)
+    @dtest.depends(test_servers.ServerCreationTest.test_create_delete_server)
     def test_resize_server_revert(self):
         """Verify that a re-sized server can be reverted."""
 
@@ -88,18 +90,18 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', self.server))
+        dtutil.assert_true(states.waitForState(self.os.servers.get,
+                                               'status', self.server))
 
         # Revert the resize
         self.server.revert_resize()
 
         # Check that the was reverted to its original flavor
         self.server = self.os.servers.get(self.server)
-        adaptor.assert_equal(new_flavor.id, self.server.flavorId)
+        dtutil.assert_equal(new_flavor.id, self.server.flavorId)
 
-    @adaptor.timed(FLAGS.timeout * 60)
-    @adaptor.depends(test_servers.ServerCreationTest.test_create_delete_server)
+    @dtest.timed(FLAGS.timeout * 60)
+    @dtest.depends(test_servers.ServerCreationTest.test_create_delete_server)
     def test_reboot_server(self):
         """Verify that a server can be rebooted."""
 
@@ -107,11 +109,11 @@ class ServerActionTest(base.BaseIntegrationTest):
         # when rebooting
         states = utils.StatusTracker('active', 'build', 'active')
         self.server.reboot()
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', self.server))
+        dtutil.assert_true(states.waitForState(self.os.servers.get,
+                                               'status', self.server))
 
-    @adaptor.timed(FLAGS.timeout * 60)
-    @adaptor.depends(test_servers.ServerCreationTest.test_create_delete_server)
+    @dtest.timed(FLAGS.timeout * 60)
+    @dtest.depends(test_servers.ServerCreationTest.test_create_delete_server)
     def test_reboot_server_hard(self):
         """Verify that a server can be hard-rebooted."""
 
@@ -119,11 +121,11 @@ class ServerActionTest(base.BaseIntegrationTest):
         # when rebooting
         states = utils.StatusTracker('active', 'build', 'active')
         self.os.servers.reboot(self.server, type='HARD')
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', self.server))
+        dtutil.assert_true(states.waitForState(self.os.servers.get,
+                                               'status', self.server))
 
-    @adaptor.timed(FLAGS.timeout * 60)
-    @adaptor.depends(test_servers.ServerCreationTest.test_create_delete_server)
+    @dtest.timed(FLAGS.timeout * 60)
+    @dtest.depends(test_servers.ServerCreationTest.test_create_delete_server)
     def test_rebuild_server(self):
         """Verify that a server is created, rebuilt, and then deleted."""
 
@@ -135,11 +137,11 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', self.server))
+        dtutil.assert_true(states.waitForState(self.os.servers.get,
+                                               'status', self.server))
 
         # Verify that rebuild acted correctly
         created_server = self.os.servers.get(self.server.id)
         img = self.os.images.get(FLAGS.image)
 
-        adaptor.assert_equal(img.id, created_server.imageId)
+        dtutil.assert_equal(img.id, created_server.imageId)

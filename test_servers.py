@@ -13,9 +13,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import dtest
+from dtest import util as dtutil
 import novaclient
 
-import adaptor
 import base
 import flags
 import utils
@@ -24,8 +25,8 @@ FLAGS = flags.FLAGS
 
 
 class ServerCreationTest(base.BaseIntegrationTest):
-    @adaptor.attr(longtest=True)
-    @adaptor.timed(FLAGS.timeout * 60)
+    @dtest.attr(longtest=True)
+    @dtest.timed(FLAGS.timeout * 60)
     def test_create_delete_server(self):
         """Verify that a server is created and that it is deleted."""
 
@@ -40,12 +41,12 @@ class ServerCreationTest(base.BaseIntegrationTest):
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        adaptor.assert_true(states.waitForState(self.os.servers.get,
-                                                'status', new_server))
+        dtutil.assert_true(states.waitForState(self.os.servers.get,
+                                               'status', new_server))
 
         # Verify the server was created correctly
         created_server = self.os.servers.get(new_server.id)
-        adaptor.assert_equal(server_name, created_server.name)
+        dtutil.assert_equal(server_name, created_server.name)
 
         # Delete the server and verify it is removed
         new_server.delete()
@@ -75,8 +76,8 @@ class BaseServerTest(base.BaseIntegrationTest):
     meta_val = None
 
     @classmethod
-    @adaptor.depends(ServerCreationTest.test_create_delete_server)
-    @adaptor.timed(FLAGS.timeout * 60)
+    @dtest.depends(ServerCreationTest.test_create_delete_server)
+    @dtest.timed(FLAGS.timeout * 60)
     def setUpClass(cls):
         """Set up an instance for use by the enclosed tests."""
 
@@ -98,8 +99,8 @@ class BaseServerTest(base.BaseIntegrationTest):
 
         # Wait for the server to transition to the appropriate state
         states = utils.StatusTracker('active', 'build', 'active')
-        adaptor.assert_true(states.waitForState(os.servers.get, 'status',
-                                                cls.server))
+        dtutil.assert_true(states.waitForState(os.servers.get, 'status',
+                                               cls.server))
 
     @classmethod
     def tearDownClass(cls):
@@ -119,8 +120,8 @@ class ServerTest(BaseServerTest):
         flavor = self.os.flavors.get(self.flavor)
         image = self.os.images.get(self.image)
         server = self.os.servers.get(self.server)
-        adaptor.assert_equal(int(image.id), int(server.imageId))
-        adaptor.assert_equal(int(flavor.id), int(server.flavorId))
+        dtutil.assert_equal(int(image.id), int(server.imageId))
+        dtutil.assert_equal(int(flavor.id), int(server.flavorId))
 
     def test_list_servers(self):
         """Test that the expected servers are returned in a list."""
@@ -133,8 +134,8 @@ class ServerTest(BaseServerTest):
                 found = True
         assert found
 
-    @adaptor.timed(FLAGS.timeout * 60)
-    @adaptor.depends(test_get_server, test_list_servers)
+    @dtest.timed(FLAGS.timeout * 60)
+    @dtest.depends(test_get_server, test_list_servers)
     def test_update_server_name(self):
         """Verify that a server's name can be modified."""
 
@@ -143,4 +144,4 @@ class ServerTest(BaseServerTest):
 
         # Verify the server's name has changed
         updated_server = self.os.servers.get(server)
-        adaptor.assert_equal('modifiedName', updated_server.name)
+        dtutil.assert_equal('modifiedName', updated_server.name)

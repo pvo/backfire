@@ -13,9 +13,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from dtest import util as dtutil
 import novaclient
 
-import adaptor
 import test_servers
 import utils
 
@@ -30,8 +30,8 @@ class ServerIpTest(test_servers.BaseServerTest):
         addrs = self.server.addresses
 
         # Make sure the public and private lists are present
-        adaptor.assert_true('public' in addrs)
-        adaptor.assert_true('private' in addrs)
+        dtutil.assert_true('public' in addrs)
+        dtutil.assert_true('private' in addrs)
 
         # Are IP addresses actually returned?
 
@@ -43,8 +43,8 @@ class ServerIpTest(test_servers.BaseServerTest):
 
         # Try to share with the group--fails for now (operation not
         # implemented in nova); note: change 1 to group, '10.0.0.1' to IP
-        adaptor.assert_raises(novaclient.OpenStackException,
-                              self.server.share_ip, 1, '10.0.0.1', True)
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.server.share_ip, 1, '10.0.0.1', True)
 
     def test_unshare(self):
         """Test that we can unshare an IP address."""
@@ -54,5 +54,5 @@ class ServerIpTest(test_servers.BaseServerTest):
 
         # Try to unshare from the group--fails for now (operation not
         # implemented in nova); note: change '10.0.0.1' to IP
-        adaptor.assert_raises(novaclient.OpenStackException,
-                              self.server.unshare_ip, '10.0.0.1')
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.server.unshare_ip, '10.0.0.1')
