@@ -40,4 +40,4 @@ if __name__ == '__main__':
     base.extract_opts(options)
 
     # Run the tests
-    sys.exit(not dtest.main(**opts_to_args(options)))
+    sys.exit(not dtest.main(**dtest.opts_to_args(options)))
