@@ -17,11 +17,11 @@ import dtest
 from dtest import util as dtutil
 import novaclient
 
-import flags
+import base
 import test_servers
 import utils
 
-FLAGS = flags.FLAGS
+FLAGS = base.FLAGS
 
 
 class ServerImageTest(test_servers.BaseServerTest):

@@ -17,12 +17,8 @@ from dtest import util as dtutil
 from glance import client
 
 import base
-import flags
 
-FLAGS = flags.FLAGS
-
-flags.DEFINE_string('test_image', 'test_image.img',
-                    'Image to use for basic image tests')
+FLAGS = base.FLAGS
 
 
 class ImageTest(base.BaseIntegrationTest):

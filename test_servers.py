@@ -18,10 +18,9 @@ from dtest import util as dtutil
 import novaclient
 
 import base
-import flags
 import utils
 
-FLAGS = flags.FLAGS
+FLAGS = base.FLAGS
 
 
 class ServerCreationTest(base.BaseIntegrationTest):

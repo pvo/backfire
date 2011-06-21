@@ -17,11 +17,10 @@ import dtest
 from dtest import util as dtutil
 
 import base
-import flags
 import test_servers
 import utils
 
-FLAGS = flags.FLAGS
+FLAGS = base.FLAGS
 
 
 class ServerActionTest(base.BaseIntegrationTest):
