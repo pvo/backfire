@@ -24,7 +24,14 @@ FLAGS = base.FLAGS
 
 
 class ServerActionTest(base.BaseIntegrationTest):
-    """Test that the server actions API works as expected."""
+    """Test that the server actions API works as expected.
+
+    Note that setUp() is extended to set self.server to a created
+    instance.  A new instance is created for each test, so this is the
+    place for destructive tests.  The tearDown() method will ensure
+    that the instance is destroyed.
+
+    """
 
     def setUp(self):
         """Set up an instance for the test."""

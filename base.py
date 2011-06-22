@@ -25,6 +25,13 @@ FLAGS = None
 
 
 def add_opts(opts):
+    """Add options.
+
+    Used to extend the list of available options that DTest provides
+    with options specific to the test suite.  You should set up
+    reasonable defaults for any options added here.
+    """
+
     # Get the default nova URL and glance host
     def_nova_url = os.environ.get('NOVA_URL', 'http://localhost:8774/v1.0/')
     def_glance_host = urlparse.urlparse(def_nova_url).hostname or 'localhost'
@@ -81,6 +88,13 @@ def add_opts(opts):
 
 
 def extract_opts(options):
+    """Extract test suite-specific options.
+
+    Saves the options and performs final handling of defaults that
+    cannot be expressed easily (such as --second-project defaulting to
+    --project-id).
+    """
+
     global FLAGS
 
     # Save the options
@@ -95,7 +109,9 @@ class BaseIntegrationTest(dtest.DTestCase):
     """Base integration test.
 
     This is a base integration test class, which ensures that an
-    OpenStack client object is available.
+    OpenStack client object is available.  A setUp() method is
+    included which sets self.os to be an instance of
+    novaclient.OpenStack().
 
     """
 

@@ -63,7 +63,34 @@ class BaseServerTest(base.BaseIntegrationTest):
 
     This class contains setUpClass() and tearDownClass()
     implementations that build and delete a server for the tests to
-    act upon.
+    act upon.  The class attributes manipulated by setUpClass() and
+    tearDownClass() are as follows:
+
+    - server
+        A handle for the instance created.  This instance is shared
+        across all tests inheriting from this class.
+
+    - server_name
+        The name of the instance created.
+
+    - flavor
+        The integer ID of the flavor the instance was created as.
+
+    - image
+        The integer ID of the image the instance was created from.
+
+    - meta_key
+        The randomly-generated key of arbitrary metadata associated
+        with the instance.
+
+    - meta_val
+        The randomly-generated data of the metadata associated with
+        the instance.
+
+    Note that setUpClass() is dependent on test_create_delete_server,
+    so if that test fails for some reason, all tests in subclasses of
+    this class will go to the DEPFAIL state.  This will also happen if
+    setUpClass() is unable to create an instance.
 
     """
 

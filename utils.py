@@ -26,7 +26,31 @@ status_ival = 10
 
 
 class StatusTracker(object):
+    """Track an object through a set of states.
+
+    Helper class designed to assist in testing that an object enters a
+    given final state when several intermediate states may also be
+    present.  It is instantiated by passing the list of states the
+    object is expected to pass through; then the waitForState() method
+    is called to wait for the final state.
+
+    Note: Because waitForState() modifies StatusTracker state
+    variables, a new StatusTracker object must be initialized each
+    time it is used.
+
+    """
+
     def __init__(self, *states, **kwargs):
+        """Initialize a StatusTracker.
+
+        Positional arguments provide an ordered sequence of states
+        through which a given object is expected to pass.  If the
+        foldcase keyword argument is passed, it is treated as a
+        boolean (defaulting to True) which specifies whether to test
+        state names case-sensitively (False) or case-insensitively
+        (True).
+        """
+
         # Are we case-folding?
         self.foldcase = kwargs.get('foldcase', True)
 
@@ -39,6 +63,13 @@ class StatusTracker(object):
         self.final_state = states[-1].lower() if self.foldcase else states[-1]
 
     def checkState(self, newstate):
+        """Test new state.
+
+        Tests that the given new state is a legal state for the object
+        to pass through.  Updates the StatusTracker state to prepare
+        for follow-on states.
+        """
+
         # Do a case folding if necessary
         if self.foldcase:
             newstate = newstate.lower()
@@ -62,6 +93,20 @@ class StatusTracker(object):
         return True if len(self.statelist) == 0 else None
 
     def waitForState(self, call, attr, *args, **kwargs):
+        """Wait for the final state.
+
+        Waits for the object to enter the final state.  The argument
+        'call' is a callable that is passed the extra positional and
+        keyword arguments; the attribute 'attr' of the return result
+        of the call is expected to be a state.  The callable is called
+        in a loop until the state either changes to the final state of
+        the tracker (in which case waitForState() returns True) or an
+        invalid state is entered (in which case waitForState() returns
+        the name of the invalid state).  The state of the
+        StatusTracker is modified, so the StatusTracker may not be
+        reused.
+        """
+
         def getState():
             # Get the object...
             obj = call(*args, **kwargs)
