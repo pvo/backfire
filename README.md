@@ -34,7 +34,7 @@ you can run tests under the virtual environment as follows:
 
 Alternatively, you can switch your shell environment to use the virtual
 environment with:
-    % . backfire-venv/bin/activate
+    % . .backfire-venv/bin/activate
 
 ## Dependencies
 
