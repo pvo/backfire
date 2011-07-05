@@ -58,6 +58,18 @@ class ServerCreationTest(base.BaseIntegrationTest):
         except novaclient.NotFound:
             return
 
+    def test_create_bad_flavor(self):
+        """Verify that an error is returned if an invalid flavor is requested"""
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.os.servers.create,name='bad_flavor',image=FLAGS.image,flavor=27)
+
+    def test_create_bad_image(self):
+        """Verify that an error is returned if an invalid image id is requested"""
+        server_name = self.randName()
+        dtutil.assert_raises(novaclient.OpenStackException,
+                             self.os.servers.create,name='bad_image',image=999999999,flavor=FLAGS.flavor)
+
+
 class BaseServerTest(base.BaseIntegrationTest):
     """Base class for server-related tests.
 
@@ -149,6 +161,10 @@ class ServerTest(BaseServerTest):
         dtutil.assert_equal(int(image.id), int(server.imageId))
         dtutil.assert_equal(int(flavor.id), int(server.flavorId))
 
+    def test_get_nonexistent_server(self):
+        """Verify that a request for a nonexistant server fails"""
+        dtutil.assert_raises(novaclient.OpenStackException,self.os.servers.get,999999999)
+
     def test_list_servers(self):
         """Test that the expected servers are returned in a list."""
 
@@ -171,3 +187,4 @@ class ServerTest(BaseServerTest):
         # Verify the server's name has changed
         updated_server = self.os.servers.get(server)
         dtutil.assert_equal('modifiedName', updated_server.name)
+
