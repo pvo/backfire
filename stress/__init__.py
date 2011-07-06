@@ -19,7 +19,6 @@ import math
 import time
 
 import base
-import test_servers
 import utils
 
 FLAGS = base.FLAGS
