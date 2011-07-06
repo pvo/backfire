@@ -58,6 +58,7 @@ class ServerCreationTest(base.BaseIntegrationTest):
         except novaclient.NotFound:
             return
 
+
 class BaseServerTest(base.BaseIntegrationTest):
     """Base class for server-related tests.
 
