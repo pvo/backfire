@@ -141,7 +141,7 @@ def wrap_request(call, *args, **kwargs):
     end = time.time()
 
     # Store this data in our request_time statistics container
-    request_time.append(end - start)
+    request_time.append((end - start) * 1000.0)
 
     # Return the response
     return response
@@ -271,7 +271,7 @@ def mk_instance(os, *args, **kwargs):
 
     # Store the create time data in our create_time statistics
     # container
-    create_time.append(end - start)
+    create_time.append((end - start) * 1000.0)
 
     # Return the new server
     return new_server
