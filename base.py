@@ -90,6 +90,11 @@ def add_opts(opts):
                     default=5000,
                     help="Number of requests per minute for stress testing "
                     "[default %default].")
+    opts.add_option("--creates-per-minute",
+                    action="store", type="int", dest="creates_per_min",
+                    default=500,
+                    help="Number of instance creates per minute for stress "
+                    "testing [default %default].")
 
 
 def extract_opts(options):
