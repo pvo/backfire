@@ -19,6 +19,7 @@ import time
 
 import base
 import stress
+from stress import test_creates
 
 FLAGS = base.FLAGS
 
@@ -28,6 +29,7 @@ class RequestTest(dtest.DTestCase):
 
     @classmethod
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.depends(test_creates.CreateTest.tearDownClass)
     def setUpClass(cls):
         """Set up the request test.
 
