@@ -95,6 +95,16 @@ def add_opts(opts):
                     default=500,
                     help="Desired number of instance creates per minute for "
                     "stress testing [default %default].")
+    opts.add_option("--request-time",
+                    action="store", type="int", dest="request_time",
+                    default=200,
+                    help="Desired average request time in milliseconds for "
+                    "stress testing [default %default].")
+    opts.add_option("--create-time",
+                    action="store", type="int", dest="create_time",
+                    default=None,
+                    help="Desired average instance creation time in "
+                    "milliseconds for stress testing.")
 
 
 def extract_opts(options):
