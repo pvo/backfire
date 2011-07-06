@@ -85,6 +85,11 @@ def add_opts(opts):
                     default="test_image.img",
                     help="Image to use for basic image tests "
                     "[default %default].")
+    opts.add_option("--requests-per-minute",
+                    action="store", type="int", dest="req_per_min",
+                    default=5000,
+                    help="Number of requests per minute for stress testing "
+                    "[default %default].")
 
 
 def extract_opts(options):
