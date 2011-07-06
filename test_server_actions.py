@@ -113,7 +113,8 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Verify the server goes through the correct states
         # when rebooting
-        states = utils.StatusTracker('active', 'build', 'active')
+        # Nova bug 795228
+        states = utils.StatusTracker('active', 'reboot', 'active')
         self.server.reboot()
         dtutil.assert_true(states.waitForState(self.os.servers.get,
                                                'status', self.server))
@@ -125,7 +126,9 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Verify the server goes through the correct states
         # when rebooting
-        states = utils.StatusTracker('active', 'build', 'active')
+        # Nova bug 795228
+        #states = utils.StatusTracker('active', 'hard_reboot', 'active')
+        states = utils.StatusTracker('active', 'hard_reboot', 'active')
         self.os.servers.reboot(self.server, type='HARD')
         dtutil.assert_true(states.waitForState(self.os.servers.get,
                                                'status', self.server))
