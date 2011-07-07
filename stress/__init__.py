@@ -201,7 +201,7 @@ class OpenStackProxy(WrapperProxy):
         return value, False
 
 
-class OpenStackWrapped(object):
+class OpenStackWrapped(WrapperProxy):
     """Proxy for the OpenStack class."""
 
     def _wrap(self, value):
