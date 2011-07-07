@@ -30,6 +30,7 @@ class CreateTest(dtest.DTestCase):
     instances = []
 
     @classmethod
+    @dtest.attr(stress=True)
     def setUpClass(cls):
         """Set up the create test.
 
@@ -40,6 +41,7 @@ class CreateTest(dtest.DTestCase):
         cls.os = stress.OpenStackWrapped.getOpenStack()
 
     @classmethod
+    @dtest.attr(stress=True)
     def tearDownClass(cls):
         """Tear down the create test.
 

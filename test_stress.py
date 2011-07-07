@@ -27,6 +27,7 @@ class StressTests(dtest.DTestCase):
 
     @classmethod
     @dtest.depends(stress.tearDown)
+    @dtest.attr(stress=True)
     def setUpClass(cls):
         """Dependency attachment point.
 

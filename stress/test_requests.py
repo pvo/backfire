@@ -30,6 +30,7 @@ class RequestTest(dtest.DTestCase):
     @classmethod
     @dtest.timed(FLAGS.timeout * 60)
     @dtest.depends(test_creates.CreateTest.tearDownClass)
+    @dtest.attr(stress=True)
     def setUpClass(cls):
         """Set up the request test.
 
@@ -44,6 +45,7 @@ class RequestTest(dtest.DTestCase):
         cls.server = stress.mk_instance(cls.os)
 
     @classmethod
+    @dtest.attr(stress=True)
     def tearDownClass(cls):
         """Tear down the request test.
 

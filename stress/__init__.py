@@ -25,12 +25,14 @@ FLAGS = base.FLAGS
 
 
 @dtest.skip
+@dtest.attr(stress=True)
 def setUp():
     """Sets up attribute and skip information for stress tests."""
 
     pass
 
 
+@dtest.attr(stress=True)
 def tearDown():
     """A convenient hook point for tests on collected statistics."""
 
