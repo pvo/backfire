@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     # If --stress is given, activate the stress tests
     if options.stress:
-        kwargs['skip'] = lambda dt: not hasattr(dt, 'stress')
+        kwargs['skip'] = lambda dt: not getattr(dt, 'stress', False)
 
     # Run the tests
     sys.exit(not dtest.main(**kwargs))
