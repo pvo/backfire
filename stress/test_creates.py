@@ -92,6 +92,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample01(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -101,6 +102,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample01)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample02(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -110,6 +112,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample02)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample03(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -119,6 +122,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample03)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample04(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -128,6 +132,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample04)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample05(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -137,6 +142,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample05)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample06(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -146,6 +152,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample06)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample07(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -155,6 +162,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample07)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample08(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -164,6 +172,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample08)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample09(self):
         """Sample the time it takes to perform creates_per_min requests."""
 
@@ -173,6 +182,7 @@ class CreateTest(dtest.DTestCase):
     @dtest.repeat(FLAGS.creates_per_min)
     @dtest.depends(test_sample09)
     @dtest.timed(FLAGS.timeout * 60)
+    @dtest.attr(stress=True)
     def test_sample10(self):
         """Sample the time it takes to perform creates_per_min requests."""
 

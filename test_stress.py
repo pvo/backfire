@@ -51,6 +51,7 @@ class StressTests(dtest.DTestCase):
         # Now, output it
         print >>dtest.status, '\n    '.join(lines)
 
+    @dtest.attr(stress=True)
     def test_requests(self):
         """Test requests per minute."""
 
@@ -61,6 +62,7 @@ class StressTests(dtest.DTestCase):
         dtutil.assert_less_equal(FLAGS.req_per_min,
                                  stress.requests_per_min.average)
 
+    @dtest.attr(stress=True)
     def test_creates(self):
         """Test instance creations per minute."""
 
@@ -72,6 +74,7 @@ class StressTests(dtest.DTestCase):
         dtutil.assert_less_equal(FLAGS.creates_per_min,
                                  stress.creates_per_min.average)
 
+    @dtest.attr(stress=True)
     def test_request_time(self):
         """Test average request time."""
 
@@ -82,6 +85,7 @@ class StressTests(dtest.DTestCase):
         dtutil.assert_less_equal(FLAGS.request_time,
                                  stress.request_time.average)
 
+    @dtest.attr(stress=True)
     def test_create_time(self):
         """Test average instance creation time."""
 

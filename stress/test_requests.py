@@ -94,6 +94,7 @@ class RequestTest(dtest.DTestCase):
     # Now, let's have a few samples
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
+    @dtest.attr(stress=True)
     def test_sample01(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -102,6 +103,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample01)
+    @dtest.attr(stress=True)
     def test_sample02(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -110,6 +112,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample02)
+    @dtest.attr(stress=True)
     def test_sample03(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -118,6 +121,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample03)
+    @dtest.attr(stress=True)
     def test_sample04(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -126,6 +130,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample04)
+    @dtest.attr(stress=True)
     def test_sample05(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -134,6 +139,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample05)
+    @dtest.attr(stress=True)
     def test_sample06(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -142,6 +148,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample06)
+    @dtest.attr(stress=True)
     def test_sample07(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -150,6 +157,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample07)
+    @dtest.attr(stress=True)
     def test_sample08(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -158,6 +166,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample08)
+    @dtest.attr(stress=True)
     def test_sample09(self):
         """Sample the time it takes to perform req_per_min requests."""
 
@@ -166,6 +175,7 @@ class RequestTest(dtest.DTestCase):
     @dtest.parallel
     @dtest.repeat(FLAGS.req_per_min)
     @dtest.depends(test_sample09)
+    @dtest.attr(stress=True)
     def test_sample10(self):
         """Sample the time it takes to perform req_per_min requests."""
 

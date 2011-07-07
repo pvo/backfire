@@ -24,7 +24,6 @@ import utils
 FLAGS = base.FLAGS
 
 
-@dtest.attr(stress=True)
 @dtest.skip
 def setUp():
     """Sets up attribute and skip information for stress tests."""
