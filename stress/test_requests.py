@@ -39,11 +39,8 @@ class RequestTest(dtest.DTestCase):
         the tests.
         """
 
-        # First, allocate an OpenStack connection
-        cls.os = stress.OpenStackWrapped.getOpenStack()
-
         # Now, we need to make an instance
-        cls.server = stress.mk_instance(cls.os)
+        cls.server = stress.mk_instance(None)
 
     @classmethod
     @dtest.attr(stress=True)
@@ -93,7 +90,8 @@ class RequestTest(dtest.DTestCase):
         # Simply retrieve the status from the server
         try:
             # Get the status
-            self.os.servers.get(self.server)
+            os = stress.OpenStackWrapped.getOpenStack()
+            os.servers.get(self.server)
         except Exception, e:
             # Print out the exception but otherwise ignore it
             print >>sys.stderr, "Exception %s" % e

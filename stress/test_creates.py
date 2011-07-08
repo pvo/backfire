@@ -32,17 +32,6 @@ class CreateTest(dtest.DTestCase):
 
     @classmethod
     @dtest.attr(stress=True)
-    def setUpClass(cls):
-        """Set up the create test.
-
-        Allocates an OpenStack connection.
-        """
-
-        # Allocate an OpenStack connection
-        cls.os = stress.OpenStackWrapped.getOpenStack()
-
-    @classmethod
-    @dtest.attr(stress=True)
     def tearDownClass(cls):
         """Tear down the create test.
 
@@ -90,7 +79,7 @@ class CreateTest(dtest.DTestCase):
         # Append the returned instance to instances so we can clean up
         # later on
         try:
-            self.instances.append(stress.mk_instance(self.os))
+            self.instances.append(stress.mk_instance(None))
         except Exception, e:
             # Print out the exception but otherwise ignore it
             print >>sys.stderr, "Exception %s" % e
