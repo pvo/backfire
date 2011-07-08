@@ -61,8 +61,8 @@ class StressTests(dtest.DTestCase):
         self.output_statistics('Requests per minute', stress.requests_per_min)
 
         # Now ensure it meets our desired limits
-        dtutil.assert_less_equal(FLAGS.req_per_min,
-                                 stress.requests_per_min.average)
+        dtutil.assert_greater_equal(stress.requests_per_min.average,
+                                    FLAGS.req_per_min)
 
     @dtest.attr(stress=True)
     def test_creates(self):
@@ -73,8 +73,8 @@ class StressTests(dtest.DTestCase):
                                stress.creates_per_min)
 
         # Now ensure it meets our desired limits
-        dtutil.assert_less_equal(FLAGS.creates_per_min,
-                                 stress.creates_per_min.average)
+        dtutil.assert_greater_equal(stress.creates_per_min.average,
+                                    FLAGS.creates_per_min)
 
     @dtest.attr(stress=True)
     def test_request_time(self):
@@ -84,8 +84,8 @@ class StressTests(dtest.DTestCase):
         self.output_statistics('Time per request', stress.request_time)
 
         # Now ensure it meets our desired limits
-        dtutil.assert_less_equal(FLAGS.request_time,
-                                 stress.request_time.average)
+        dtutil.assert_less_equal(stress.request_time.average,
+                                 FLAGS.request_time)
 
     @dtest.attr(stress=True)
     def test_create_time(self):
@@ -97,5 +97,5 @@ class StressTests(dtest.DTestCase):
 
         # Now ensure it meets our desired limits
         if FLAGS.create_time is not None:
-            dtutil.assert_less_equal(FLAGS.create_time,
-                                     stress.create_time.average)
+            dtutil.assert_less_equal(stress.create_time.average,
+                                     FLAGS.create_time)
