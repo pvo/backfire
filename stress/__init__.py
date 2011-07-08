@@ -154,6 +154,7 @@ def wrap_request(call, *args, **kwargs):
     # Make the call
     print "%r(%r, %r)" % (call, args, kwargs)
     response = call(*args, **kwargs)
+    print "-> %r" % response
 
     # Get the end time of the request
     end = time.time()
