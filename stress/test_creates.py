@@ -15,6 +15,7 @@
 
 import dtest
 from dtest import util as dtutil
+import sys
 import time
 
 import base
@@ -88,7 +89,11 @@ class CreateTest(dtest.DTestCase):
 
         # Append the returned instance to instances so we can clean up
         # later on
-        self.instances.append(stress.mk_instance(self.os))
+        try:
+            self.instances.append(stress.mk_instance(self.os))
+        except Exception, e:
+            # Print out the exception but otherwise ignore it
+            print >>sys.stderr, "Exception %s" % e
 
     # Now, let's have a few samples
     @dtest.parallel
