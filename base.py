@@ -85,6 +85,30 @@ def add_opts(opts):
                     default="test_image.img",
                     help="Image to use for basic image tests "
                     "[default %default].")
+    opts.add_option("--stress",
+                    action="store_true", dest="stress",
+                    help="Whether to execute the stress tests or "
+                    "functional tests")
+    opts.add_option("--requests-per-minute",
+                    action="store", type="int", dest="req_per_min",
+                    default=5000,
+                    help="Desired number of requests per minute for stress "
+                    "testing [default %default].")
+    opts.add_option("--creates-per-minute",
+                    action="store", type="int", dest="creates_per_min",
+                    default=500,
+                    help="Desired number of instance creates per minute for "
+                    "stress testing [default %default].")
+    opts.add_option("--request-time",
+                    action="store", type="int", dest="request_time",
+                    default=200,
+                    help="Desired average request time in milliseconds for "
+                    "stress testing [default %default].")
+    opts.add_option("--create-time",
+                    action="store", type="int", dest="create_time",
+                    default=None,
+                    help="Desired average instance creation time in "
+                    "milliseconds for stress testing.")
 
 
 def extract_opts(options):

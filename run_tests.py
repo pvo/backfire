@@ -39,5 +39,12 @@ if __name__ == '__main__':
     # can get to; also handles some defaults
     base.extract_opts(options)
 
+    # Obtain the arguments for dtest.main()
+    kwargs = dtest.opts_to_args(options)
+
+    # If --stress is given, activate the stress tests
+    if options.stress:
+        kwargs['skip'] = lambda dt: not getattr(dt, 'stress', False)
+
     # Run the tests
-    sys.exit(not dtest.main(**dtest.opts_to_args(options)))
+    sys.exit(not dtest.main(**kwargs))

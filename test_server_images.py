@@ -58,7 +58,6 @@ class ServerImageTest(test_servers.BaseServerTest):
                                                'status', backup_image))
 
         dtutil.assert_equal(backup_image.name, "backup")
-         
 
         # Finally, rebuild from the image
         states = utils.StatusTracker('active', 'build', 'active')
