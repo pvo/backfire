@@ -130,7 +130,7 @@ class Statistics(object):
         round(num_samples * .9).
         """
 
-        return self._percentile(.5)
+        return self._percentile(.9)
 
 
 # Allocate our necessary statistics-tracking items
