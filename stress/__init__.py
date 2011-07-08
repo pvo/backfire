@@ -59,7 +59,7 @@ class Statistics(object):
 
         self._avg = None
         self._stddev = None
-        self._sorted = []
+        self._sorted = None
 
     def __len__(self):
         """Return the number of samples."""
@@ -109,7 +109,7 @@ class Statistics(object):
                 self._sorted = sorted(self._samples)
             else:
                 return 0.0
-        print "list length: %d; percent: %.2f; list index: %d" % (len(self._sorted), percent, int(len(self._sorted) * percent))
+
         return self._sorted[int(len(self._sorted) * percent)]
 
     @property
