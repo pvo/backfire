@@ -76,7 +76,10 @@ class Statistics(object):
         """Retrieve the average of the samples, with memoization."""
 
         if self._avg is None:
-            self._avg = sum(self._samples) / len(self._samples)
+            if len(self._samples) > 0:
+                self._avg = sum(self._samples) / len(self._samples)
+            else:
+                self._avg = 0.0
 
         return self._avg
 
@@ -85,8 +88,11 @@ class Statistics(object):
         """Retrieve the standard deviation, with memoization."""
 
         if self._stddev is None:
-            tmp = [(p - self.average) ** 2 for p in self._samples]
-            self._stddev = math.sqrt(sum(tmp) / (len(tmp) - 1))
+            if len(self._samples) > 1:
+                tmp = [(p - self.average) ** 2 for p in self._samples]
+                self._stddev = math.sqrt(sum(tmp) / (len(tmp) - 1))
+            else:
+                self._stddev = 0.0
 
         return self._stddev
 
@@ -99,7 +105,10 @@ class Statistics(object):
         """
 
         if self._sorted is None:
-            self._sorted = sorted(self._samples)
+            if len(self._samples) > 0:
+                self._sorted = sorted(self._samples)
+            else:
+                return 0.0
 
         return self._sorted[int(math.ceil(len(self._sorted) * .5))]
 
@@ -112,7 +121,10 @@ class Statistics(object):
         """
 
         if self._sorted is None:
-            self._sorted = sorted(self._samples)
+            if len(self._samples) > 0:
+                self._sorted = sorted(self._samples)
+            else:
+                return 0.0
 
         return self._sorted[int(math.ceil(len(self._sorted) * .9))]
 
