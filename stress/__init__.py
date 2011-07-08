@@ -96,12 +96,12 @@ class Statistics(object):
 
         return self._stddev
 
-    @property
-    def median(self):
-        """Retrieve the median item, with memoization.
+    def _percentile(self, percent):
+        """Retrieve the item representing the percentile.
 
-        The median is defined as the item at index
-        ceil(num_samples * .5).
+        The percentile is defined such that the given percentage of
+        samples are less than that value.  The percentage should be
+        given as a float between 0 and 1.
         """
 
         if self._sorted is None:
@@ -110,23 +110,27 @@ class Statistics(object):
             else:
                 return 0.0
 
-        return self._sorted[int(math.ceil(len(self._sorted) * .5))]
+        return self._sorted[int(len(self._sorted) * percent)]
+
+    @property
+    def median(self):
+        """Retrieve the median item, with memoization.
+
+        The median is defined as the item at index
+        round(num_samples * .5).
+        """
+
+        return self._percentile(.5)
 
     @property
     def percentile90(self):
         """Retrieve the 90th percentile item, with memoization.
 
         The 90th percentile item is defined as the item at index
-        ceil(num_samples * .9).
+        round(num_samples * .9).
         """
 
-        if self._sorted is None:
-            if len(self._samples) > 0:
-                self._sorted = sorted(self._samples)
-            else:
-                return 0.0
-
-        return self._sorted[int(math.ceil(len(self._sorted) * .9))]
+        return self._percentile(.5)
 
 
 # Allocate our necessary statistics-tracking items
