@@ -44,6 +44,7 @@ class StressTests(dtest.DTestCase):
         lines = ['%s:' % title]
 
         # Attach information
+        lines.append('        Samples: %d' % len(stats))
         lines.append('        Average: %.2f' % stats.average)
         lines.append('       Std. Dev: %.2f' % stats.stddev)
         lines.append('         Median: %.2f' % stats.median)
