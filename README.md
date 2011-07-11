@@ -22,10 +22,23 @@ this command:
 from the environment variables set in novarc or have reasonable
 defaults.  To see the defaults, use the --help option.)
 
+A python virtual environment can be set up by running:
+
+    % python tools/install_venv.py
+
+This will set up a python virtual environment under .backfire-venv,
+and will download all the dependencies. If you choose this method,
+you can run tests under the virtual environment as follows:
+    
+    % ./tools/with_venv.sh python run_tests.py
+
+Alternatively, you can switch your shell environment to use the virtual
+environment with:
+    % . .backfire-venv/bin/activate
+
 ## Dependencies
 
-DTest - Installed from PyPi
-python-novaclient - Installed from PyPi
+See tools/pip-requires.
 
 ## Notes
 
