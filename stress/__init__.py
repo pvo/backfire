@@ -142,9 +142,17 @@ def wrap_request(call, *args, **kwargs):
     start = time.time()
 
     # Make the call
-    print "%r(%r, %r)" % (call, args, kwargs)
-    response = call(*args, **kwargs)
-    print "-> %r" % response
+    if FLAGS.debug:
+        print "%r(%r, %r)" % (call, args, kwargs)
+    try:
+        response = call(*args, **kwargs)
+        if FLAGS.debug:
+            print "-> %r" % response
+    except Exception, e:
+        if FLAGS.debug:
+            print "-> Threw %r" % e
+
+        raise
 
     # Get the end time of the request
     end = time.time()
