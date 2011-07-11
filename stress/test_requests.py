@@ -58,6 +58,7 @@ class RequestTest(dtest.DTestCase):
         Saves the start time.
         """
 
+        self.total = 0
         self.start = time.time()
 
     def tearDown(self):
@@ -76,7 +77,7 @@ class RequestTest(dtest.DTestCase):
         # tracker
         ival = (end - self.start) / 60.0
 
-        sample = FLAGS.req_per_min / ival
+        sample = self.total / ival
 
         print >>dtest.status, 'Sampled %.2f requests per minute.' % sample
 
@@ -92,6 +93,7 @@ class RequestTest(dtest.DTestCase):
             # Get the status
             os = stress.OpenStackWrapped.getOpenStack()
             os.servers.get(self.server)
+            self.total += 1
         except Exception, e:
             # Print out the exception but otherwise ignore it
             print >>sys.stderr, "Exception %s" % e

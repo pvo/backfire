@@ -47,6 +47,7 @@ class CreateTest(dtest.DTestCase):
         Saves the start time.
         """
 
+        self.total = 0
         self.start = time.time()
 
     def tearDown(self):
@@ -65,7 +66,7 @@ class CreateTest(dtest.DTestCase):
         # tracker
         ival = (end - self.start) / 60.0
 
-        sample = FLAGS.creates_per_min / ival
+        sample = self.total / ival
 
         print >>dtest.status, 'Sampled %.2f creates per minute.' % sample
 
@@ -80,6 +81,7 @@ class CreateTest(dtest.DTestCase):
         # later on
         try:
             self.instances.append(stress.mk_instance(None))
+            self.total += 1
         except Exception, e:
             # Print out the exception but otherwise ignore it
             print >>sys.stderr, "Exception %s" % e
