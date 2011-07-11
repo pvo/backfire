@@ -96,7 +96,7 @@ class Statistics(object):
 
         return self._stddev
 
-    def _percentile(self, percent):
+    def percentile(self, percent):
         """Retrieve the item representing the percentile.
 
         The percentile is defined such that the given percentage of
@@ -120,17 +120,7 @@ class Statistics(object):
         round(num_samples * .5).
         """
 
-        return self._percentile(.5)
-
-    @property
-    def percentile90(self):
-        """Retrieve the 90th percentile item, with memoization.
-
-        The 90th percentile item is defined as the item at index
-        round(num_samples * .9).
-        """
-
-        return self._percentile(.9)
+        return self.percentile(.5)
 
 
 # Allocate our necessary statistics-tracking items

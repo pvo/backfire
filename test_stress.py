@@ -48,7 +48,8 @@ class StressTests(dtest.DTestCase):
         lines.append('        Average: %.2f' % stats.average)
         lines.append('       Std. Dev: %.2f' % stats.stddev)
         lines.append('         Median: %.2f' % stats.median)
-        lines.append('90th percentile: %.2f' % stats.percentile90)
+        lines.append('10th percentile: %.2f' % stats.percentile(.1))
+        lines.append('90th percentile: %.2f' % stats.percentile(.9))
 
         # Now, output it
         print >>dtest.status, '\n    '.join(lines)
