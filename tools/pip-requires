@@ -1,9 +1,9 @@
 dtest
 SQLAlchemy==0.6.3
-eventlet==0.9.12
+eventlet
 python-novaclient==2.5.3
-routes==1.12.3
-WebOb==0.9.8
+routes
+WebOb
 PasteDeploy
 paste
 sqlalchemy-migrate
