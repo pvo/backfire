@@ -115,9 +115,11 @@ class StatusTracker(object):
         while state is None:
             # Emit a status message every 5 times (~10 seconds)
             if counter > 0 and counter % (status_ival / resolution) == 0:
-                print >>dtest.status, ('Waiting for state "%s"... (%s)' %
+                print >>dtest.status, ('Waiting for state "%s", currently "%s" (%s)' %
                                        (self.final_state,
+                                        getattr(call(*args, **kwargs), attr),
                                         datetime.datetime.now() - start))
+
             counter += 1
 
             time.sleep(resolution)
