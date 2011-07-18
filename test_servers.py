@@ -29,7 +29,6 @@ class ServerCreationTest(base.BaseIntegrationTest):
     def test_create_delete_server(self):
         """Verify that a server is created and that it is deleted."""
 
-        #import pdb; pdb.set_trace()
         # Setup
         server_name = self.randName()
         new_server = self.os.servers.create(name=server_name,
