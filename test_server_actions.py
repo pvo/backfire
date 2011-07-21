@@ -72,8 +72,9 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        dtutil.assert_true(states.waitForState(self.os.servers.get,
-                                               'status', self.server))
+        dtutil.assert_is(True,
+                         states.waitForState(self.os.servers.get,
+                                             'status', self.server))
 
         # Confirm the resize
         self.server.confirm_resize()
@@ -96,8 +97,9 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        dtutil.assert_true(states.waitForState(self.os.servers.get,
-                                               'status', self.server))
+        dtutil.assert_is(True,
+                         states.waitForState(self.os.servers.get,
+                                             'status', self.server))
 
         # Revert the resize
         self.server.revert_resize()
@@ -116,8 +118,9 @@ class ServerActionTest(base.BaseIntegrationTest):
         # Nova bug 795228
         states = utils.StatusTracker('active', 'reboot', 'active')
         self.server.reboot()
-        dtutil.assert_true(states.waitForState(self.os.servers.get,
-                                               'status', self.server))
+        dtutil.assert_is(True,
+                         states.waitForState(self.os.servers.get,
+                                             'status', self.server))
 
     @dtest.timed(FLAGS.timeout * 60)
     @dtest.depends(test_servers.ServerCreationTest.test_create_delete_server)
@@ -129,8 +132,9 @@ class ServerActionTest(base.BaseIntegrationTest):
         # Nova bug 795228
         states = utils.StatusTracker('active', 'hard_reboot', 'active')
         self.os.servers.reboot(self.server, type='HARD')
-        dtutil.assert_true(states.waitForState(self.os.servers.get,
-                                               'status', self.server))
+        dtutil.assert_is(True,
+                         states.waitForState(self.os.servers.get,
+                                             'status', self.server))
 
     @dtest.timed(FLAGS.timeout * 60)
     @dtest.depends(test_servers.ServerCreationTest.test_create_delete_server)
@@ -145,8 +149,9 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        dtutil.assert_true(states.waitForState(self.os.servers.get,
-                                               'status', self.server))
+        dtutil.assert_is(True,
+                         states.waitForState(self.os.servers.get,
+                                             'status', self.server))
 
         # Verify that rebuild acted correctly
         created_server = self.os.servers.get(self.server.id)

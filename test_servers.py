@@ -31,43 +31,91 @@ class ServerCreationTest(base.BaseIntegrationTest):
 
         # Setup
         server_name = self.randName()
-        new_server = self.os.servers.create(name=server_name,
-                                            image=FLAGS.image,
-                                            flavor=FLAGS.flavor)
+        new_server = self._make_server(server_name,
+                                       FLAGS.image,
+                                       FLAGS.flavor)
 
         # Legal states...
         states = utils.StatusTracker('active', 'build', 'active')
 
         # Wait for server to transition to next state and make sure it
         # went to the correct one
-        dtutil.assert_true(states.waitForState(self.os.servers.get,
-                                               'status', new_server))
+        dtutil.assert_is(True,
+                         states.waitForState(self.os.servers.get,
+                                             'status', new_server))
 
         # Verify the server was created correctly
         created_server = self.os.servers.get(new_server.id)
         dtutil.assert_equal(server_name, created_server.name)
 
+        # Delete the server.  The delete testing is moved to
+        # test_delete
+        new_server.delete()
+
+    @dtest.attr(longtest=True)
+    @dtest.timed(FLAGS.timeout * 60)
+    def test_delete(self):
+        """Verify servers can be deleted.
+
+        This logically belongs in test_create_delete_server,
+        which is a dependency for all the other tests. However,
+        this test fails due to Nova bug #793785
+        """
+
+        server_name = self.randName()
+        new_server = self._make_server(server_name, FLAGS.image, FLAGS.flavor)
+
+        # Legal states...
+        states = utils.StatusTracker('active', 'build', 'active')
+
+        # Wait for server to transition to next state and make sure it
+        # went to the correct one
+        states.waitForState(self.os.servers.get, 'status', new_server)
+
         # Delete the server and verify it is removed
         new_server.delete()
 
-        # Legal states...I don't believe it'll ever go to 'deleted',
-        # though...
-        states = utils.StatusTracker('active', 'build', 'deleted')
+        # Legal states. Nova bug #793785
+        # Status goes through 'build' when deleting, but should not.
+        states = utils.StatusTracker('active', 'deleted')
+
+        # Verify that state goes to "deleted", or raises NotFound exception.
         try:
-            states.waitForState(self.os.servers.get, 'status', new_server.id)
-        except novaclient.NotFound:
-            return
+            dtutil.assert_is(True,
+                             states.waitForState(self.os.servers.get,
+                                                 'status', new_server))
+        except novaclient.exceptions.NotFound:
+            pass
+
+    def _make_server(self,
+                     server_name=None,
+                     server_image=FLAGS.image,
+                     server_flavor=FLAGS.flavor):
+        """Create and return a new server.
+        """
+        if not server_name:
+            server_name = self.randName()
+
+        return self.os.servers.create(name=server_name,
+                                      image=server_image,
+                                      flavor=server_flavor)
 
     def test_create_bad_flavor(self):
-        """Verify that an error is returned if an invalid flavor is requested"""
+        """Verify an error is returned if an invalid flavor is requested"""
         dtutil.assert_raises(novaclient.OpenStackException,
-                             self.os.servers.create,name='bad_flavor',image=FLAGS.image,flavor=27)
+                             self.os.servers.create,
+                             name='bad_flavor',
+                             image=FLAGS.image,
+                             flavor=27)
 
     def test_create_bad_image(self):
-        """Verify that an error is returned if an invalid image id is requested"""
+        """Verify an error is returned if an invalid image id is requested"""
         server_name = self.randName()
         dtutil.assert_raises(novaclient.OpenStackException,
-                             self.os.servers.create,name='bad_image',image=999999999,flavor=FLAGS.flavor)
+                             self.os.servers.create,
+                             name='bad_image',
+                             image=999999999,
+                             flavor=FLAGS.flavor)
 
 
 class BaseServerTest(base.BaseIntegrationTest):
@@ -137,8 +185,9 @@ class BaseServerTest(base.BaseIntegrationTest):
 
         # Wait for the server to transition to the appropriate state
         states = utils.StatusTracker('active', 'build', 'active')
-        dtutil.assert_true(states.waitForState(os.servers.get, 'status',
-                                               cls.server))
+        dtutil.assert_is(True,
+                         states.waitForState(os.servers.get, 'status',
+                                             cls.server))
 
     @classmethod
     def tearDownClass(cls):
@@ -163,7 +212,9 @@ class ServerTest(BaseServerTest):
 
     def test_get_nonexistent_server(self):
         """Verify that a request for a nonexistant server fails"""
-        dtutil.assert_raises(novaclient.OpenStackException,self.os.servers.get,999999999)
+        dtutil.assert_raises(novaclient.OpenStackException,
+                self.os.servers.get,
+                999999999)
 
     def test_list_servers(self):
         """Test that the expected servers are returned in a list."""
