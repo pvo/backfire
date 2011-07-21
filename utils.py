@@ -24,6 +24,7 @@ import dtest
 resolution = 1
 status_ival = 10
 
+
 class StatusTracker(object):
     """Track an object through a set of states.
 

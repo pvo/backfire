@@ -187,4 +187,3 @@ class ServerTest(BaseServerTest):
         # Verify the server's name has changed
         updated_server = self.os.servers.get(server)
         dtutil.assert_equal('modifiedName', updated_server.name)
-
