@@ -15,14 +15,13 @@
 
 import datetime
 import time
-
 import dtest
-
 
 # Resolution is the time between successive status checks; status_ival
 # is the (approximate) interval between successive status messages
 resolution = 1
 status_ival = 10
+
 
 class StatusTracker(object):
     """Track an object through a set of states.
@@ -53,7 +52,7 @@ class StatusTracker(object):
         # Save case-folding
         self.foldcase = kwargs.get('foldcase', True)
 
-        # Save the states 
+        # Save the states
         self.statelist = states
 
         # Initialize the current state and final state
@@ -73,17 +72,19 @@ class StatusTracker(object):
 
         for i in range(self.curr_state_idx, len(self.statelist)):
             self.curr_state_idx = i
-            if self._statesMatch(self.statelist[i], newstate): 
+            if self._statesMatch(self.statelist[i], newstate):
                 if i == len(self.statelist) - 1:
-                    return True # matches last state
-                else: 
-                    return None # matches intermediate state
+                    return True  # matches last state
+                else:
+                    return None  # matches intermediate state
 
-        return False # does not match any state
+        return newstate  # does not match any state
 
     def _statesMatch(self, state1, state2):
-        if self.foldcase : return (state1.lower() == state2.lower())
-        else : return (state1 == state2)
+        if self.foldcase:
+            return (state1.lower() == state2.lower())
+        else:
+            return (state1 == state2)
 
     def waitForState(self, call, attr, *args, **kwargs):
         """Wait for the final state.
@@ -95,7 +96,7 @@ class StatusTracker(object):
         in a loop until the state either changes to the final state of
         the tracker (in which case waitForState() returns True) or an
         invalid state is entered (in which case waitForState() returns
-        False).  The state of the StatusTracker is modified, so the 
+        False).  The state of the StatusTracker is modified, so the
         StatusTracker may not be reused.
         """
 
@@ -114,15 +115,16 @@ class StatusTracker(object):
         while state is None:
             # Emit a status message every 5 times (~10 seconds)
             if counter > 0 and counter % (status_ival / resolution) == 0:
-                print >>dtest.status, ('Waiting for state "%s", currently "%s" (%s)' %
-                                       (self.final_state,
-                                        getattr(call(*args, **kwargs), attr),
-                                        datetime.datetime.now() - start))
+                print >>dtest.status, (
+                        'Waiting for state "%s", currently "%s" (%s)' %
+                         (self.final_state,
+                         getattr(call(*args, **kwargs), attr),
+                         datetime.datetime.now() - start))
 
             counter += 1
 
             time.sleep(resolution)
             state = getState()
 
-        # Return last state; will be True if it's legal or False if not
+        # Return last state; will be True if it's legal, state name otherwise
         return state
