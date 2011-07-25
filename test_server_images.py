@@ -36,7 +36,7 @@ class ServerImageTest(test_servers.BaseServerTest):
                                      'saving', 'active')
 
         # Make a backup image for the server
-        backup_image = self.os.images.create(self.server, "backup")
+        backup_image = self.os.images.create("backup", self.server)
         dtutil.assert_is(True,
                          states.waitForState(self.os.images.get,
                                              'status', backup_image))
@@ -54,7 +54,7 @@ class ServerImageTest(test_servers.BaseServerTest):
 
         # Make a backup image for the server
 
-        backup_image = self.os.images.create(self.server, "backup")
+        backup_image = self.os.images.create("backup", self.server)
         dtutil.assert_is(True,
                          states.waitForState(self.os.images.get,
                                              'status', backup_image))
