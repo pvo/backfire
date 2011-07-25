@@ -15,6 +15,7 @@
 
 from dtest import util as dtutil
 from glance import client
+import novaclient
 
 import base
 
@@ -96,3 +97,10 @@ class ImageTest(base.BaseIntegrationTest):
         dtutil.assert_equal(img.id, self._image_id)
         dtutil.assert_equal(img.name, self._image_name)
         dtutil.assert_equal(img.status, 'ACTIVE')
+
+    def test_get_nonexistent(self):
+        """Test that a request for a nonexistant id fails"""
+
+        img_id = FLAGS.nonexistent_flavor
+        dtutil.assert_raises(novaclient.exceptions.NotFound,
+                             self.os.images.get, img_id)
