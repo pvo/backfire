@@ -18,6 +18,8 @@ import novaclient
 
 import base
 
+FLAGS = base.FLAGS
+
 
 class FlavorTest(base.BaseIntegrationTest):
     """Test that the flavors portion of the API works as expected."""
@@ -67,13 +69,5 @@ class FlavorTest(base.BaseIntegrationTest):
     def test_get_nonexistent(self):
         """Test that we get an appropriate error for a bad flavor."""
 
-        try:
-            self.os.flavors.get(500)
-            raise Exception("test_get_nonexistent failed")
-        except Exception as ex:
-            assert(type(ex) == novaclient.exceptions.NotFound)
-
-        # the following fails:
-        #dtutil.assert_raises(novaclient.exceptions.NotFound,
-        #                     self.os.flavors.get(500))
-
+        dtutil.assert_raises(novaclient.exceptions.NotFound,
+                             self.os.flavors.get, FLAGS.nonexistent_flavor)
