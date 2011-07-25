@@ -15,6 +15,7 @@
 
 import dtest
 from dtest import util as dtutil
+from glance import client as glanceclient
 import novaclient
 
 import base
@@ -51,6 +52,46 @@ class ServerCreationTest(base.BaseIntegrationTest):
         # Delete the server.  The delete testing is moved to
         # test_delete
         new_server.delete()
+
+    @dtest.attr(longtest=True)
+    @dtest.timed(FLAGS.timeout * 60)
+    def test_create_from_bad_image(self):
+        """Verify a bad image will not boot"""
+
+        new_meta = {}
+
+        # Create a bad image
+        with open(FLAGS.bad_test_image, 'rb') as img:
+
+            # Set up metadata for the image
+            meta = {
+                'name': self.randName(prefix='bad_image'),
+                'type': 'machine',
+                'is_public': True
+                }
+
+            # Upload the image
+            new_meta = self.glance_connection.add_image(meta, img)
+
+        try:
+            # Boot the bad image
+            server_name = self.randName(prefix='bad_image')
+            new_server = self._make_server(server_name,
+                                           new_meta['id'],
+                                           FLAGS.flavor)
+
+            # Specify expeted states
+            states = utils.StatusTracker('build', 'error')
+
+            # Verify state transition
+            dtutil.assert_is(True,
+                             states.waitForState(self.os.servers.get,
+                                                 'status',
+                                                 new_server))
+        finally:
+            # Cleanup
+            self.os.servers.delete(new_server)
+            self.glance_connection.delete_image(new_meta['id'])
 
     @dtest.attr(longtest=True)
     @dtest.timed(FLAGS.timeout * 60)
@@ -100,21 +141,21 @@ class ServerCreationTest(base.BaseIntegrationTest):
                                       image=server_image,
                                       flavor=server_flavor)
 
-    def test_create_bad_flavor(self):
+    def test_create_from_nonexistent_flavor(self):
         """Verify an error is returned if an invalid flavor is requested"""
         dtutil.assert_raises(novaclient.OpenStackException,
                              self.os.servers.create,
-                             name='bad_flavor',
+                             name='nonexistent_flavor',
                              image=FLAGS.image,
-                             flavor=27)
+                             flavor=FLAGS.nonexistent_flavor)
 
-    def test_create_bad_image(self):
+    def test_create_from_nonexistent_image(self):
         """Verify an error is returned if an invalid image id is requested"""
         server_name = self.randName()
         dtutil.assert_raises(novaclient.OpenStackException,
                              self.os.servers.create,
-                             name='bad_image',
-                             image=999999999,
+                             name='nonexistent_image',
+                             image=FLAGS.nonexistent_image,
                              flavor=FLAGS.flavor)
 
 
@@ -214,7 +255,7 @@ class ServerTest(BaseServerTest):
         """Verify that a request for a nonexistant server fails"""
         dtutil.assert_raises(novaclient.OpenStackException,
                 self.os.servers.get,
-                999999999)
+                FLAGS.nonexistent_image)
 
     def test_list_servers(self):
         """Test that the expected servers are returned in a list."""
