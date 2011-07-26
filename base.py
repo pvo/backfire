@@ -177,8 +177,40 @@ class BaseIntegrationTest(dtest.DTestCase):
         return glanceclient.Client(FLAGS.glance_host,
                                    FLAGS.glance_port)
 
+    @staticmethod
+    def createGlanceImage(file_name,
+                          image_name,
+                          image_type='machine',
+                          is_public=True):
+
+        # Let's open the test image
+        with open(file_name, 'rb') as img:
+
+            # Set up metadata for the image
+            meta = {
+                'name': image_name,
+                'type': image_type,
+                'is_public': is_public
+                }
+
+            # Get a glance connection
+            c = BaseIntegrationTest.getGlanceConnection()
+
+            # Upload the image
+            new_meta = c.add_image(meta, img)
+
+            # Return the meta
+            return new_meta
+
+    @staticmethod
+    def deleteGlanceImage(id):
+        """Delete a glance image."""
+
+        c = base.getGlanceConnection()
+        c.delete_image(id)
+
     def setUp(self):
-        """For each test, set up an OpenStack instance."""
+        """For each test, set up OpenStack and Glance instance."""
 
         # Get an OpenStack instance
         self.os = self.getOpenStack()

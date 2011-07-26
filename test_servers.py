@@ -58,20 +58,10 @@ class ServerCreationTest(base.BaseIntegrationTest):
     def test_create_from_bad_image(self):
         """Verify a bad image will not boot"""
 
-        new_meta = {}
-
         # Create a bad image
-        with open(FLAGS.bad_test_image, 'rb') as img:
-
-            # Set up metadata for the image
-            meta = {
-                'name': self.randName(prefix='bad_image'),
-                'type': 'machine',
-                'is_public': True
-                }
-
-            # Upload the image
-            new_meta = self.glance_connection.add_image(meta, img)
+        new_meta = self.createGlanceImage(file_name=FLAGS.bad_test_image,
+                                          image_name=self.randName(
+                                              prefix='bad_image'))
 
         try:
             # Boot the bad image
@@ -132,11 +122,13 @@ class ServerCreationTest(base.BaseIntegrationTest):
                      server_name=None,
                      server_image=FLAGS.image,
                      server_flavor=FLAGS.flavor):
-        """Create and return a new server.
-        """
+        """Create and return a new server."""
+
+        # Set the server name
         if not server_name:
             server_name = self.randName()
 
+        # Instantiate and return the server
         return self.os.servers.create(name=server_name,
                                       image=server_image,
                                       flavor=server_flavor)

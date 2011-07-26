@@ -15,6 +15,7 @@
 
 from dtest import util as dtutil
 from glance import client
+import glance.common.exception
 import novaclient
 
 import base
@@ -33,25 +34,12 @@ class ImageTest(base.BaseIntegrationTest):
         """Set up image tests by adding a known image."""
 
         # Set up the _image_name
-        cls._image_name = cls.randName()
+        cls._image_name = cls.randName(prefix="base-image")
 
-        # Let's open the test image
-        with open(FLAGS.test_image, 'rb') as img:
-            # Get a glance connection
-            c = client.Client(FLAGS.glance_host, FLAGS.glance_port)
+        new_meta = cls.createGlanceImage(file_name=FLAGS.test_image,
+                                         image_name=cls._image_name)
 
-            # Set up metadata for the image
-            meta = {
-                'name': cls._image_name,
-                'type': 'machine',
-                'is_public': True
-                }
-
-            # Upload the image
-            new_meta = c.add_image(meta, img)
-
-            # Save the identifier
-            cls._image_id = new_meta['id']
+        cls._image_id = new_meta['id']
 
     @classmethod
     def tearDownClass(cls):
@@ -61,10 +49,8 @@ class ImageTest(base.BaseIntegrationTest):
         if cls._image_id is None:
             return
 
-        # Get a glance connection
-        c = client.Client(FLAGS.glance_host, FLAGS.glance_port)
-
         # Delete the image
+        c = cls.getGlanceConnection()
         c.delete_image(cls._image_id)
 
     def test_list(self):
@@ -99,8 +85,43 @@ class ImageTest(base.BaseIntegrationTest):
         dtutil.assert_equal(img.status, 'ACTIVE')
 
     def test_get_nonexistent(self):
-        """Test that a request for a nonexistant id fails"""
+        """Test that a get request for a nonexistant id fails"""
 
-        img_id = FLAGS.nonexistent_flavor
+        img_id = FLAGS.nonexistent_image
+        # test via nova client
         dtutil.assert_raises(novaclient.exceptions.NotFound,
                              self.os.images.get, img_id)
+
+        # test via glance client
+        dtutil.assert_raises(glance.common.exception.NotFound,
+                             self.glance_connection.get_image, img_id)
+
+    def test_create_and_delete(self):
+        """Test that an image can be created and deleted."""
+
+        name = self.randName(prefix="create_delete_image_")
+
+        # Create a new image
+        new_meta = self.createGlanceImage(file_name=FLAGS.test_image,
+                                          image_name=name)
+
+        # Verify it exists and the values are correct
+        img = self.os.images.get(new_meta['id'])
+        dtutil.assert_equal(img.id, new_meta['id'])
+        dtutil.assert_equal(img.name, new_meta['name'])
+        dtutil.assert_equal(img.status, 'ACTIVE')
+
+        # Delete the image
+        self.glance_connection.delete_image(new_meta['id'])
+
+        # Verify it cannot be retrieved
+        dtutil.assert_raises(novaclient.exceptions.NotFound,
+                             self.os.images.get, new_meta['id'])
+
+    def test_delete_nonexistent(self):
+        """Test that a delete request for a nonexistant id fails"""
+
+        img_id = FLAGS.nonexistent_image
+
+        dtutil.assert_raises(glance.common.exception.NotFound,
+                             self.glance_connection.delete_image, img_id)
