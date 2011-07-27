@@ -18,7 +18,6 @@ import time
 
 import dtest
 
-
 # Resolution is the time between successive status checks; status_ival
 # is the (approximate) interval between successive status messages
 resolution = 1
@@ -51,16 +50,17 @@ class StatusTracker(object):
         (True).
         """
 
-        # Are we case-folding?
+        # Save case-folding
         self.foldcase = kwargs.get('foldcase', True)
 
-        # Save the states and fold-case setting
-        self.statelist = [s.lower() if self.foldcase else s
-                          for s in states[1:]]
+        # Save the states
+        self.statelist = states
 
-        # Initialize the current state and final state
-        self.curr_state = states[0].lower() if self.foldcase else states[0]
-        self.final_state = states[-1].lower() if self.foldcase else states[-1]
+        # Initialize the final state
+        self.final_state = states[-1]
+
+        # Initialize the state pointer.
+        self.curr_state_idx = 0
 
     def checkState(self, newstate):
         """Test new state.
@@ -70,27 +70,21 @@ class StatusTracker(object):
         for follow-on states.
         """
 
-        # Do a case folding if necessary
+        for i in range(self.curr_state_idx, len(self.statelist)):
+            self.curr_state_idx = i
+            if self._statesMatch(self.statelist[i], newstate):
+                if i == len(self.statelist) - 1:
+                    return True  # matches last state
+                else:
+                    return None  # matches intermediate state
+
+        return newstate  # does not match any state
+
+    def _statesMatch(self, state1, state2):
         if self.foldcase:
-            newstate = newstate.lower()
-
-        # If it's the current state, we're fine...
-        if self.curr_state == newstate:
-            return None
-
-        # Not current state, let's see if it's one of the next states
-        try:
-            idx = self.statelist.index(newstate)
-        except ValueError:
-            # New state is not in the list of valid states!
-            return newstate
-
-        # OK, update current state and pare down the list of states
-        self.curr_state = self.statelist[idx]
-        self.statelist = self.statelist[idx + 1:]
-
-        # We return True only if we hit the end of the states list
-        return True if len(self.statelist) == 0 else None
+            return (state1.lower() == state2.lower())
+        else:
+            return (state1 == state2)
 
     def waitForState(self, call, attr, *args, **kwargs):
         """Wait for the final state.
@@ -102,9 +96,8 @@ class StatusTracker(object):
         in a loop until the state either changes to the final state of
         the tracker (in which case waitForState() returns True) or an
         invalid state is entered (in which case waitForState() returns
-        the name of the invalid state).  The state of the
-        StatusTracker is modified, so the StatusTracker may not be
-        reused.
+        the name of the invalid state).  The state of the StatusTracker 
+        is modified, so the StatusTracker may not be reused.
         """
 
         def getState():
@@ -122,14 +115,16 @@ class StatusTracker(object):
         while state is None:
             # Emit a status message every 5 times (~10 seconds)
             if counter > 0 and counter % (status_ival / resolution) == 0:
-                print >>dtest.status, ('Waiting for state "%s"... (%s)' %
-                                       (self.final_state,
-                                        datetime.datetime.now() - start))
+                print >>dtest.status, (
+                        'Waiting for state "%s", currently "%s" (%s)' %
+                         (self.final_state,
+                         getattr(call(*args, **kwargs), attr),
+                         datetime.datetime.now() - start))
+
             counter += 1
 
             time.sleep(resolution)
             state = getState()
 
-        # Return last state; will be True if it's legal or a state
-        # string if it's not
+        # Return last state; will be True if it's legal, state name otherwise
         return state

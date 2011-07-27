@@ -14,6 +14,7 @@
 #    under the License.
 
 from dtest import util as dtutil
+import novaclient
 
 import base
 
@@ -62,3 +63,17 @@ class FlavorTest(base.BaseIntegrationTest):
             dtutil.assert_equal(exemplar['name'], flav.name)
             dtutil.assert_equal(exemplar['ram'], flav.ram)
             dtutil.assert_equal(exemplar['disk'], flav.disk)
+
+    def test_get_nonexistent(self):
+        """Test that we get an appropriate error for a bad flavor."""
+
+        try:
+            self.os.flavors.get(500)
+            raise Exception("test_get_nonexistent failed")
+        except Exception as ex:
+            assert(type(ex) == novaclient.exceptions.NotFound)
+
+        # the following fails:
+        #dtutil.assert_raises(novaclient.exceptions.NotFound,
+        #                     self.os.flavors.get(500))
+
