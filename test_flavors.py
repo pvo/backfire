@@ -76,4 +76,3 @@ class FlavorTest(base.BaseIntegrationTest):
         # the following fails:
         #dtutil.assert_raises(novaclient.exceptions.NotFound,
         #                     self.os.flavors.get(500))
-
