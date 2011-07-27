@@ -32,7 +32,7 @@ class ServerCreationTest(base.BaseIntegrationTest):
 
         # Setup
         server_name = self.randName()
-        new_server = self._make_server(server_name,
+        new_server = self.createServer(server_name,
                                        FLAGS.image,
                                        FLAGS.flavor)
 
@@ -66,7 +66,7 @@ class ServerCreationTest(base.BaseIntegrationTest):
         try:
             # Boot the bad image
             server_name = self.randName(prefix='bad_image')
-            new_server = self._make_server(server_name,
+            new_server = self.createServer(server_name,
                                            new_meta['id'],
                                            FLAGS.flavor)
 
@@ -94,7 +94,7 @@ class ServerCreationTest(base.BaseIntegrationTest):
         """
 
         server_name = self.randName()
-        new_server = self._make_server(server_name, FLAGS.image, FLAGS.flavor)
+        new_server = self.createServer(server_name, FLAGS.image, FLAGS.flavor)
 
         # Legal states...
         states = utils.StatusTracker('active', 'build', 'active')
@@ -117,21 +117,6 @@ class ServerCreationTest(base.BaseIntegrationTest):
                                                  'status', new_server))
         except novaclient.exceptions.NotFound:
             pass
-
-    def _make_server(self,
-                     server_name=None,
-                     server_image=FLAGS.image,
-                     server_flavor=FLAGS.flavor):
-        """Create and return a new server."""
-
-        # Set the server name
-        if not server_name:
-            server_name = self.randName()
-
-        # Instantiate and return the server
-        return self.os.servers.create(name=server_name,
-                                      image=server_image,
-                                      flavor=server_flavor)
 
     def test_create_from_nonexistent_flavor(self):
         """Verify an error is returned if an invalid flavor is requested"""

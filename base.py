@@ -202,6 +202,25 @@ class BaseIntegrationTest(dtest.DTestCase):
             # Return the meta
             return new_meta
 
+    def createServer(self,
+                     server_name=None,
+                     server_image=None,
+                     server_flavor=None):
+        """Create and return a new server."""
+
+        # Set the server name
+        if not server_name:
+            server_name = self.randName()
+        if not server_image:
+            server_image = FLAGS.image
+        if not server_flavor:
+            server_flavor = FLAGS.flavor
+
+        # Instantiate and return the server
+        return self.os.servers.create(name=server_name,
+                                      image=server_image,
+                                      flavor=server_flavor)
+
     @staticmethod
     def deleteGlanceImage(id):
         """Delete a glance image."""
