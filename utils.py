@@ -15,6 +15,7 @@
 
 import datetime
 import time
+
 import dtest
 
 # Resolution is the time between successive status checks; status_ival
@@ -55,8 +56,7 @@ class StatusTracker(object):
         # Save the states
         self.statelist = states
 
-        # Initialize the current state and final state
-        # self.curr_state = states[0]
+        # Initialize the final state
         self.final_state = states[-1]
 
         # Initialize the state pointer.
@@ -96,8 +96,8 @@ class StatusTracker(object):
         in a loop until the state either changes to the final state of
         the tracker (in which case waitForState() returns True) or an
         invalid state is entered (in which case waitForState() returns
-        False).  The state of the StatusTracker is modified, so the
-        StatusTracker may not be reused.
+        the name of the invalid state).  The state of the StatusTracker 
+        is modified, so the StatusTracker may not be reused.
         """
 
         def getState():
