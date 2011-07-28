@@ -91,10 +91,6 @@ def add_opts(opts):
                     action="store", type="int", dest="nonexistent_image",
                     default=99999999,
                     help="ID of nonexistent image [default %default].")
-    opts.add_option("--nonexistent-server",
-                    action="store", type="int", dest="nonexistent_server",
-                    default=99999999,
-                    help="ID of nonexistent server [default %default].")
     opts.add_option("--test-image",
                     action="store", type="string", dest="test_image",
                     default="test_image.img",

@@ -68,7 +68,6 @@ class ServerActionTest(base.BaseIntegrationTest):
         # Resize the server and wait for it to finish
         new_flavor = self.os.flavors.get(2)
         self.server.resize(new_flavor)
-        time.sleep(4)
 
         # Legal states...
         states = utils.StatusTracker('active', 'resize-confirm')
