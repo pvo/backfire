@@ -22,6 +22,7 @@ import dtest
 from glance import client as glanceclient
 import novaclient
 
+
 FLAGS = None
 
 
