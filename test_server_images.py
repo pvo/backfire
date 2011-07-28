@@ -44,7 +44,10 @@ class ServerImageTest(test_servers.BaseServerTest):
         dtutil.assert_equal(backup_image.name, "backup")
 
         # Cleanup
-        self.os.images.delete(backup_image)
+        # self.os.images.delete(backup_image) will not work.
+        # os.images.create makes private images, which cannot
+        # be deleted via the python_novaclient AFAIK.
+        self.glance_connection.delete_image(backup_image)
 
     @dtest.attr(longtest=True)
     @dtest.timed(FLAGS.timeout * 120)

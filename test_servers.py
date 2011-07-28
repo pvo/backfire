@@ -62,7 +62,6 @@ class ServerCreationTest(base.BaseIntegrationTest):
         new_meta = self.createGlanceImage(file_name=FLAGS.bad_test_image,
                                           image_name=self.randName(
                                               prefix='bad_image'))
-
         try:
             # Boot the bad image
             server_name = self.randName(prefix='bad_image')
@@ -78,6 +77,10 @@ class ServerCreationTest(base.BaseIntegrationTest):
                              states.waitForState(self.os.servers.get,
                                                  'status',
                                                  new_server))
+
+            # Verify the details
+            dtutil.assert_equal(new_server.name, server_name)
+            dtutil.assert_equal(new_server.flavorId, FLAGS.flavor)
         finally:
             # Cleanup
             self.glance_connection.delete_image(new_meta['id'])
@@ -134,6 +137,12 @@ class ServerCreationTest(base.BaseIntegrationTest):
                              name='nonexistent_image',
                              image=FLAGS.nonexistent_image,
                              flavor=FLAGS.flavor)
+
+    def test_delete_nonexistant_server(self):
+        """Verify deleting a nonexistent server raises an exception."""
+        dtutil.assert_raises(novaclient.exceptions.NotFound,
+                             self.os.servers.delete,
+                             FLAGS.nonexistent_server)
 
 
 class BaseServerTest(base.BaseIntegrationTest):
@@ -252,6 +261,11 @@ class ServerTest(BaseServerTest):
 
         server = self.server
         self.os.servers.update(server=server.id, name='modifiedName')
+        states = utils.StatusTracker('active', 'password', 'active')
+        dtutil.assert_is(True,
+                         states.waitForState(self.os.servers.get, 'status',
+                                             server)
+                        )
 
         # Verify the server's name has changed
         updated_server = self.os.servers.get(server)

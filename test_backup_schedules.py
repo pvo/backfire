@@ -48,7 +48,5 @@ class BackupScheduleTest(base.BaseIntegrationTest):
                                 weekly=novaclient.BACKUP_WEEKLY_SUNDAY)
             dtutil.assert_equal(new_sched.daily,
                                 novaclient.BACKUP_DAILY_DISABLED)
-        except Exception as ex:
-            pass
         finally:
             server.delete()
