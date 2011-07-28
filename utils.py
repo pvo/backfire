@@ -96,8 +96,9 @@ class StatusTracker(object):
         in a loop until the state either changes to the final state of
         the tracker (in which case waitForState() returns True) or an
         invalid state is entered (in which case waitForState() returns
-        the name of the invalid state).  The state of the StatusTracker 
-        is modified, so the StatusTracker may not be reused.
+        the name of the invalid state).  The state of the
+        StatusTracker is modified, so the StatusTracker may not be
+        reused.
         """
 
         def getState():

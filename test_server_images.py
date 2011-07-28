@@ -79,5 +79,5 @@ class ServerImageTest(test_servers.BaseServerTest):
         except Exception:
             pass
         finally:
-            # delete the image 
+            # delete the image
             self.glance_connection.delete_image(backup_image)

@@ -80,8 +80,8 @@ class ServerCreationTest(base.BaseIntegrationTest):
                                                  new_server))
         finally:
             # Cleanup
-            self.os.servers.delete(new_server)
             self.glance_connection.delete_image(new_meta['id'])
+            self.os.servers.delete(new_server)
 
     @dtest.attr(longtest=True)
     @dtest.timed(FLAGS.timeout * 60)
