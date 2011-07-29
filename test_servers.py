@@ -32,7 +32,7 @@ class ServerCreationTest(base.BaseIntegrationTest):
 
         # Setup
         server_name = self.randName()
-        new_server = self.createServer(server_name,
+        new_server = self.create_server(server_name,
                                        FLAGS.image,
                                        FLAGS.flavor)
 
@@ -59,14 +59,14 @@ class ServerCreationTest(base.BaseIntegrationTest):
         """Verify a bad image will not boot"""
 
         # Create a bad image
-        new_meta = self.createGlanceImage(file_name=FLAGS.bad_test_image,
+        new_meta = self.create_glance_image(file_name=FLAGS.bad_test_image,
                                           image_name=self.randName(
                                               prefix='bad_image'))
 
         try:
             # Boot the bad image
             server_name = self.randName(prefix='bad_image')
-            new_server = self.createServer(server_name,
+            new_server = self.create_server(server_name,
                                            new_meta['id'],
                                            FLAGS.flavor)
 
@@ -94,7 +94,7 @@ class ServerCreationTest(base.BaseIntegrationTest):
         """
 
         server_name = self.randName()
-        new_server = self.createServer(server_name, FLAGS.image, FLAGS.flavor)
+        new_server = self.create_server(server_name, FLAGS.image, FLAGS.flavor)
 
         # Legal states...
         states = utils.StatusTracker('active', 'build', 'active')

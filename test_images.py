@@ -36,7 +36,7 @@ class ImageTest(base.BaseIntegrationTest):
         # Set up the _image_name
         cls._image_name = cls.randName(prefix="base-image")
 
-        new_meta = cls.createGlanceImage(file_name=FLAGS.test_image,
+        new_meta = cls.create_glance_image(file_name=FLAGS.test_image,
                                          image_name=cls._image_name)
 
         cls._image_id = new_meta['id']
@@ -102,7 +102,7 @@ class ImageTest(base.BaseIntegrationTest):
         name = self.randName(prefix="create_delete_image_")
 
         # Create a new image
-        new_meta = self.createGlanceImage(file_name=FLAGS.test_image,
+        new_meta = self.create_glance_image(file_name=FLAGS.test_image,
                                           image_name=name)
 
         # Verify it exists and the values are correct

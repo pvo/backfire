@@ -25,13 +25,14 @@ FLAGS = base.FLAGS
 
 class BackupScheduleTest(base.BaseIntegrationTest):
 
+    @dtest.failing
     def test_backup_schedules(self):
         """Test the backup schedules.
 
         This is not yet implemented in Nova.
         """
 
-        server = self.createServer(
+        server = self.create_server(
             self.randName(prefix="backup_schedule"))
 
         try:
@@ -48,7 +49,7 @@ class BackupScheduleTest(base.BaseIntegrationTest):
                                 weekly=novaclient.BACKUP_WEEKLY_SUNDAY)
             dtutil.assert_equal(new_sched.daily,
                                 novaclient.BACKUP_DAILY_DISABLED)
-        except Exception as ex:
-            pass
+        except novaclient.exceptions.HTTPNotImplemented as ex:
+            raise AssertionError("backup schedules are not implemented")
         finally:
             server.delete()

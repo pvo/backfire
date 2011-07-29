@@ -179,7 +179,7 @@ class BaseIntegrationTest(dtest.DTestCase):
                                    FLAGS.glance_port)
 
     @staticmethod
-    def createGlanceImage(file_name,
+    def create_glance_image(file_name,
                           image_name,
                           image_type='machine',
                           is_public=True):
@@ -203,7 +203,7 @@ class BaseIntegrationTest(dtest.DTestCase):
             # Return the meta
             return new_meta
 
-    def createServer(self,
+    def create_server(self,
                      server_name=None,
                      server_image=None,
                      server_flavor=None):

@@ -36,7 +36,8 @@ class ServerImageTest(test_servers.BaseServerTest):
                                      'saving', 'active')
 
         # Make a backup image for the server
-        backup_image = self.os.images.create("backup", self.server)
+        backup_image = self.os.images.create(server=self.server,
+                                             name="backup")
         dtutil.assert_is(True,
                          states.waitForState(self.os.images.get,
                                              'status', backup_image))
@@ -56,7 +57,8 @@ class ServerImageTest(test_servers.BaseServerTest):
                                      'saving', 'active')
 
         # Make a backup image for the server
-        backup_image = self.os.images.create("backup", self.server)
+        backup_image = self.os.images.create(server=self.server,
+                                             name="backup")
         dtutil.assert_is(True,
                          states.waitForState(self.os.images.get,
                                              'status', backup_image))
@@ -76,8 +78,6 @@ class ServerImageTest(test_servers.BaseServerTest):
             # This has the original image_id out of convention.
             image = self.os.images.get(created_server.imageId)
             dtutil.assert_equal(backup_image.name, image.name)
-        except Exception:
-            pass
         finally:
             # delete the image
             self.glance_connection.delete_image(backup_image)

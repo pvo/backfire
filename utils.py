@@ -72,7 +72,7 @@ class StatusTracker(object):
 
         for i in range(self.curr_state_idx, len(self.statelist)):
             self.curr_state_idx = i
-            if self._statesMatch(self.statelist[i], newstate):
+            if self._states_match(self.statelist[i], newstate):
                 if i == len(self.statelist) - 1:
                     return True  # matches last state
                 else:
@@ -80,7 +80,7 @@ class StatusTracker(object):
 
         return newstate  # does not match any state
 
-    def _statesMatch(self, state1, state2):
+    def _states_match(self, state1, state2):
         if self.foldcase:
             return (state1.lower() == state2.lower())
         else:
