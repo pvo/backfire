@@ -50,7 +50,7 @@ class ImageTest(base.BaseIntegrationTest):
             return
 
         # Delete the image
-        c = cls.getGlanceConnection()
+        c = cls.get_glance_connection()
         c.delete_image(cls._image_id)
 
     def test_list(self):

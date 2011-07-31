@@ -171,7 +171,7 @@ class BaseIntegrationTest(dtest.DTestCase):
         return os
 
     @staticmethod
-    def getGlanceConnection():
+    def get_glance_connection():
         """Set up and return a Glance connection."""
 
         # Set up the Glance connection
@@ -195,7 +195,7 @@ class BaseIntegrationTest(dtest.DTestCase):
                 }
 
             # Get a glance connection
-            c = BaseIntegrationTest.getGlanceConnection()
+            c = BaseIntegrationTest.get_glance_connection()
 
             # Upload the image
             new_meta = c.add_image(meta, img)
@@ -226,7 +226,7 @@ class BaseIntegrationTest(dtest.DTestCase):
     def deleteGlanceImage(id):
         """Delete a glance image."""
 
-        c = base.getGlanceConnection()
+        c = base.get_glance_connection()
         c.delete_image(id)
 
     def setUp(self):
@@ -236,7 +236,7 @@ class BaseIntegrationTest(dtest.DTestCase):
         self.os = self.getOpenStack()
 
         # Get a Glance connection
-        self.glance_connection = self.getGlanceConnection()
+        self.glance_connection = self.get_glance_connection()
 
     @staticmethod
     def randName(length=20, charset=string.lowercase, prefix=""):
