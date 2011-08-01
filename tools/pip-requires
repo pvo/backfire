@@ -8,3 +8,4 @@ PasteDeploy
 paste
 sqlalchemy-migrate
 glance
+xattr
