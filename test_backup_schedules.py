@@ -18,12 +18,13 @@ from dtest import util as dtutil
 import novaclient
 
 import base
+import test_servers
 import utils
 
 FLAGS = base.FLAGS
 
 
-class BackupScheduleTest(base.BaseIntegrationTest):
+class BackupScheduleTest(test_servers.BaseServerTest):
 
     @dtest.failing
     def test_backup_schedules(self):

@@ -222,13 +222,6 @@ class BaseIntegrationTest(dtest.DTestCase):
                                       image=server_image,
                                       flavor=server_flavor)
 
-    @staticmethod
-    def deleteGlanceImage(id):
-        """Delete a glance image."""
-
-        c = base.get_glance_connection()
-        c.delete_image(id)
-
     def setUp(self):
         """For each test, set up OpenStack and Glance instance."""
 
