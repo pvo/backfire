@@ -1,7 +1,7 @@
 dtest
 SQLAlchemy==0.6.3
 eventlet
-python-novaclient==2.5.3
+python-novaclient==2.5.8
 routes
 WebOb
 PasteDeploy

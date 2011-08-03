@@ -36,12 +36,16 @@ class ServerImageTest(test_servers.BaseServerTest):
                                      'saving', 'active')
 
         # Make a backup image for the server
-        backup_image = self.os.images.create(self.server, "backup")
+        backup_image = self.os.images.create(server=self.server,
+                                             name="backup")
         dtutil.assert_is(True,
                          states.waitForState(self.os.images.get,
                                              'status', backup_image))
 
         dtutil.assert_equal(backup_image.name, "backup")
+
+        # Cleanup
+        self.os.images.delete(backup_image)
 
     @dtest.attr(longtest=True)
     @dtest.timed(FLAGS.timeout * 120)
@@ -53,23 +57,27 @@ class ServerImageTest(test_servers.BaseServerTest):
                                      'saving', 'active')
 
         # Make a backup image for the server
-
-        backup_image = self.os.images.create(self.server, "backup")
+        backup_image = self.os.images.create(server=self.server,
+                                             name="backup")
         dtutil.assert_is(True,
                          states.waitForState(self.os.images.get,
                                              'status', backup_image))
 
-        dtutil.assert_equal(backup_image.name, "backup")
+        # wrap it in a try so that we can clean up afterwards
+        try:
+            dtutil.assert_equal(backup_image.name, "backup")
 
-        # Finally, rebuild from the image
-        states = utils.StatusTracker('active', 'build', 'active')
-        self.os.servers.rebuild(self.server.id, backup_image.id)
-        dtutil.assert_is(True,
-                         states.waitForState(self.os.servers.get,
-                                             'status', self.server))
+            # Finally, rebuild from the image
+            states = utils.StatusTracker('active', 'build', 'active')
+            self.os.servers.rebuild(self.server.id, backup_image.id)
+            dtutil.assert_is(True,
+                             states.waitForState(self.os.servers.get,
+                                                 'status', self.server))
+            created_server = self.os.servers.get(self.server.id)
 
-        created_server = self.os.servers.get(self.server.id)
-
-        # This has the original image_id out of convention.
-        image = self.os.images.get(created_server.imageId)
-        dtutil.assert_equal(backup_image.name, image.name)
+            # This has the original image_id out of convention.
+            image = self.os.images.get(created_server.imageId)
+            dtutil.assert_equal(backup_image.name, image.name)
+        finally:
+            # delete the image
+            self.glance_connection.delete_image(backup_image)

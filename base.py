@@ -15,9 +15,11 @@
 
 import os
 import random
+import string
 import urlparse
 
 import dtest
+from glance import client as glanceclient
 import novaclient
 
 
@@ -76,14 +78,28 @@ def add_opts(opts):
                     default=1,
                     help="ID of flavor for built instances "
                     "[default %default].")
+    opts.add_option("--nonexistent-flavor",
+                    action="store", type="int", dest="nonexistent_flavor",
+                    default=27,
+                    help="ID of nonexistent flavor "
+                    "[default %default].")
     opts.add_option("--image",
                     action="store", type="int", dest="image",
                     default=3,
                     help="ID of image for built instances [default %default].")
+    opts.add_option("--nonexistent-image",
+                    action="store", type="int", dest="nonexistent_image",
+                    default=99999999,
+                    help="ID of nonexistent image [default %default].")
     opts.add_option("--test-image",
                     action="store", type="string", dest="test_image",
                     default="test_image.img",
                     help="Image to use for basic image tests "
+                    "[default %default].")
+    opts.add_option("--bad-test-image",
+                    action="store", type="string", dest="bad_test_image",
+                    default="bad_test_image.img",
+                    help="Image to use for broken image tests "
                     "[default %default].")
     opts.add_option("--stress",
                     action="store_true", dest="stress",
@@ -154,15 +170,70 @@ class BaseIntegrationTest(dtest.DTestCase):
 
         return os
 
+    @staticmethod
+    def get_glance_connection():
+        """Set up and return a Glance connection."""
+
+        # Set up the Glance connection
+        return glanceclient.Client(FLAGS.glance_host,
+                                   FLAGS.glance_port)
+
+    @staticmethod
+    def create_glance_image(file_name,
+                          image_name,
+                          image_type='machine',
+                          is_public=True):
+
+        # Let's open the test image
+        with open(file_name, 'rb') as img:
+
+            # Set up metadata for the image
+            meta = {
+                'name': image_name,
+                'type': image_type,
+                'is_public': is_public
+                }
+
+            # Get a glance connection
+            c = BaseIntegrationTest.get_glance_connection()
+
+            # Upload the image
+            new_meta = c.add_image(meta, img)
+
+            # Return the meta
+            return new_meta
+
+    def create_server(self,
+                     server_name=None,
+                     server_image=None,
+                     server_flavor=None):
+        """Create and return a new server."""
+
+        # Set the server name
+        if not server_name:
+            server_name = self.randName()
+        if not server_image:
+            server_image = FLAGS.image
+        if not server_flavor:
+            server_flavor = FLAGS.flavor
+
+        # Instantiate and return the server
+        return self.os.servers.create(name=server_name,
+                                      image=server_image,
+                                      flavor=server_flavor)
+
     def setUp(self):
-        """For each test, set up an OpenStack instance."""
+        """For each test, set up OpenStack and Glance instance."""
 
         # Get an OpenStack instance
         self.os = self.getOpenStack()
 
+        # Get a Glance connection
+        self.glance_connection = self.get_glance_connection()
+
     @staticmethod
-    def randName(length=20, charset="abcdefghijklmnopqrstuvwxyz"):
+    def randName(length=20, charset=string.lowercase, prefix=""):
         """Generate a random name of the given length."""
 
-        return ''.join([charset[random.randrange(len(charset))]
+        return prefix + ''.join([charset[random.randrange(len(charset))]
                         for i in xrange(length)])

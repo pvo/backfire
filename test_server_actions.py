@@ -13,6 +13,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import time
+
 import dtest
 from dtest import util as dtutil
 
@@ -92,6 +94,10 @@ class ServerActionTest(base.BaseIntegrationTest):
         new_flavor = self.os.flavors.get(2)
         self.server.resize(new_flavor)
 
+        # Let the resize-confirm register or self.os.serves.get will
+        # raise an exception
+        time.sleep(2)
+
         # Create list of states
         states = utils.StatusTracker('active', 'resize-confirm')
 
@@ -143,6 +149,10 @@ class ServerActionTest(base.BaseIntegrationTest):
 
         # Trigger a rebuild
         self.os.servers.rebuild(self.server.id, FLAGS.image)
+
+        # Must wait for the rebuild to start, or self.os.servers.get
+        # throws an exception
+        time.sleep(4)
 
         # Legal states...
         states = utils.StatusTracker('active', 'build', 'active')
