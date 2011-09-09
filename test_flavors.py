@@ -25,11 +25,11 @@ class FlavorTest(base.BaseIntegrationTest):
     """Test that the flavors portion of the API works as expected."""
 
     recognized_flavors = {
-        'm1.tiny': dict(id=1, name='m1.tiny', ram=512, disk=0),
-        'm1.small': dict(id=2, name='m1.small', ram=2048, disk=20),
-        'm1.medium': dict(id=3, name='m1.medium', ram=4096, disk=40),
-        'm1.large': dict(id=4, name='m1.large', ram=8192, disk=80),
-        'm1.xlarge': dict(id=5, name='m1.xlarge', ram=16384, disk=160)}
+        '1': dict(id=1, name='256 slice', ram=256, disk=10),
+        '2': dict(id=2, name='512 slice', ram=512, disk=20),
+        '3': dict(id=3, name='1GB slice', ram=1024, disk=40),
+        '4': dict(id=4, name='2GB slice', ram=2048, disk=80),
+        '5': dict(id=5, name='4GB slice', ram=4096, disk=160)}
 
     def test_list(self):
         """Test that flavors can be listed."""
